@@ -113,6 +113,10 @@ export const csvTextNodeUpdater = async (
   }
   const { id, name, characters, listOption, headingLevel } = nodeInfo;
 
+
+  const listOptionFromNode = getListOption(node);
+  const headingLevelFromNode = getHeadingLevel(node, settings);
+
   // TODO: also check other info updates
   if (node.characters === nodeInfo.characters) {
     return []; //  false; // Not updated
@@ -154,5 +158,5 @@ export const csvNodeUpdater = async (
     text: csvTextNodeUpdater,
     children: csvChildrenNodeUpdater,
   });
-  console.log("csvNodeUpdater results", results);
+  console.log("csvNodeUpdater updated nodes", results);
 };
