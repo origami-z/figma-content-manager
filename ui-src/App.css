@@ -1,0 +1,39 @@
+body {
+  margin: 0;
+}
+
+#root,
+.appRoot {
+  height: 100%;
+}
+
+.appRoot.appRoot {
+  background: var(--uitk-container-background-high);
+  /* Vertical align */
+  justify-content: center;
+}
+
+.uitk-light {
+  color-scheme: light;
+}
+
+.uitk-dark {
+  color-scheme: dark;
+}
+
+.uitk-dark .appRoot {
+  color: var(--uitk-text-primary-foreground);
+}
+
+header {
+  text-align: center;
+}
+
+svg {
+  stroke: var(--color-icon, rgba(0, 0, 0, 0.9));
+}
+
+img {
+  height: auto;
+  width: 2rem;
+}
