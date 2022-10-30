@@ -1,19 +1,13 @@
-import {
-  Button,
-  FlexLayout,
-  FormField,
-  Input,
-  StackLayout,
-} from "@jpmorganchase/uitk-core";
+import { Button, StackLayout } from "@jpmorganchase/uitk-core";
+import { FileDropZone } from "@jpmorganchase/uitk-lab";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { PostToFigmaMessage, PostToUIMessage } from "../../shared-src";
-import Logo from "./Logo";
-import logoPng from "./logo.png";
-import logoSvg from "./logo.svg?raw";
+import { downloadDataUri } from "../components/utils";
 
 export const MainView = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const [success, setSuccess] = useState<boolean | undefined>(undefined);
+  const [csvFile, setCsvFile] = useState<File | null>(null);
 
   const handleWindowMessage = useCallback(
     (event: {
@@ -24,8 +18,9 @@ export const MainView = () => {
       if (event.data.pluginMessage) {
         const { pluginMessage } = event.data;
         switch (pluginMessage.type) {
-          case "created-nodes-result": {
-            setSuccess(pluginMessage.success);
+          case "file-generated": {
+            const { data, defaultFileName } = pluginMessage;
+            downloadDataUri(data, defaultFileName);
             break;
           }
           default:
@@ -42,53 +37,64 @@ export const MainView = () => {
     };
   }, [handleWindowMessage]);
 
-  const onCreate = () => {
-    const count = Number(inputRef.current?.value || 0);
+  const onExportCsv = () => {
     parent.postMessage(
       {
         pluginMessage: {
-          type: "create-rectangles",
-          count,
+          type: "export-csv-file",
         } as PostToFigmaMessage,
       },
       "*"
     );
   };
 
-  const onCancel = () => {
-    parent.postMessage(
-      { pluginMessage: { type: "cancel" } as PostToFigmaMessage },
-      "*"
-    );
+  const onUpdateCsv = () => {
+    if (csvFile !== null) {
+      var reader = new FileReader();
+      reader.readAsText(csvFile, "UTF-8");
+      reader.onload = function (evt) {
+        const fileReadString = evt.target?.result as any;
+        console.log({ fileReadString });
+        parent.postMessage(
+          {
+            pluginMessage: {
+              type: "update-content-with-csv-file",
+              csvString: fileReadString,
+            } as PostToFigmaMessage,
+          },
+          "*"
+        );
+      };
+      reader.onerror = function (evt) {
+        console.error("error reading file");
+        setCsvFile(null);
+      };
+    }
   };
 
-  const buttonCreateResultSuffix =
-    success !== undefined ? (success ? " ✅" : " ❌") : null;
+  const onFileAccepted = (files: readonly File[]) => {
+    if (files.length) {
+      setCsvFile(files[0]);
+    } else {
+      setCsvFile(null);
+    }
+  };
 
   return (
     <StackLayout className="appRoot" align="center">
-      <header>
-        <img src={logoPng} />
-        &nbsp;
-        <img src={`data:image/svg+xml;utf8,${logoSvg}`} />
-        &nbsp;
-        <Logo />
-        <h2>Rectangle Creator</h2>
-      </header>
-      <FormField label="Rectangle Count" fullWidth={false}>
-        <Input
-          id="input"
-          type="number"
-          inputProps={{ min: 0 }}
-          ref={inputRef}
+      <Button onClick={onExportCsv}>Export CSV</Button>
+      {csvFile === null ? (
+        <FileDropZone
+          accept="csv"
+          onFilesRejected={() => setCsvFile(null)}
+          onFilesAccepted={onFileAccepted}
         />
-      </FormField>
-      <FlexLayout align="center">
-        <Button className="brand" onClick={onCreate}>
-          Create{buttonCreateResultSuffix}
-        </Button>
-        <Button onClick={onCancel}>Cancel</Button>
-      </FlexLayout>
+      ) : (
+        <p>{csvFile.name}</p>
+      )}
+      <Button onClick={onUpdateCsv} disabled={csvFile === null}>
+        Update
+      </Button>
     </StackLayout>
   );
 };

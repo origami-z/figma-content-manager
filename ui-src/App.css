@@ -24,16 +24,3 @@ body {
 .uitk-dark .appRoot {
   color: var(--uitk-text-primary-foreground);
 }
-
-header {
-  text-align: center;
-}
-
-svg {
-  stroke: var(--color-icon, rgba(0, 0, 0, 0.9));
-}
-
-img {
-  height: auto;
-  width: 2rem;
-}

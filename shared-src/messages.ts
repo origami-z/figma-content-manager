@@ -1,25 +1,35 @@
-export type CreatedNodesResultToUIMessage = {
-  type: "created-nodes-result";
-  success: boolean;
+export type CsvNodeInfo = {
+  id: string;
+  name: string;
+  characters: string;
+  listOption: string;
+  headingLevel: string;
+}
+
+export type FileGeneratedToUIMessage = {
+  type: "file-generated";
+  data: string;
+  defaultFileName: string;
 };
 
-export type PostToUIMessage = CreatedNodesResultToUIMessage;
+export type PostToUIMessage = FileGeneratedToUIMessage;
 
 // This is useful to run some code when react is finished to get new information from Figma
 export type UiFinishLoadingToFigmaMessage = {
   type: "ui-finish-loading";
 };
 
-export type CreateTriangleToFigmaMessage = {
-  type: "create-rectangles";
-  count: number;
+export type ExportCsvFileToFigmaMessage = {
+  type: "export-csv-file";
 };
 
-export type CancelToFigmaMessage = {
-  type: "cancel";
-};
+
+export type UpdateContentWithCsvFileToFigmaMessage = {
+  type: 'update-content-with-csv-file';
+  csvString: string;
+}
 
 export type PostToFigmaMessage =
   | UiFinishLoadingToFigmaMessage
-  | CreateTriangleToFigmaMessage
-  | CancelToFigmaMessage;
+  | ExportCsvFileToFigmaMessage
+  | UpdateContentWithCsvFileToFigmaMessage;

@@ -1,7 +1,7 @@
 {
-  "name": "figma-react-vite-template",
+  "name": "figma-content-manager",
   "version": "1.0.0",
-  "description": "Figma react typescript template",
+  "description": "Content Manager Figma Plugin",
   "scripts": {
     "test": "jest",
     "prettier": "prettier --write . --ignore-path .gitignore",
@@ -24,6 +24,7 @@
     "@jpmorganchase/uitk-icons": "0.6.0",
     "@jpmorganchase/uitk-lab": "0.7.1",
     "@jpmorganchase/uitk-theme": "0.5.0",
+    "papaparse": "^5.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
@@ -36,6 +37,7 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@types/jest": "^29.2.0",
+    "@types/papaparse": "^5.3.5",
     "@types/react": "^18.0.15",
     "@types/react-dom": "^18.0.6",
     "@vitejs/plugin-react": "^2.0.0",

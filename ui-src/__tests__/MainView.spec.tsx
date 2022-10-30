@@ -8,20 +8,20 @@ describe("MainView", () => {
     window.parent.postMessage = jest.fn();
     render(<MainView />);
   });
-  test("renders h2", () => {
-    expect(screen.getByText("Rectangle Creator")).toBeInTheDocument();
+  test("renders export button", () => {
+    expect(screen.getByText("Export CSV")).toBeInTheDocument();
   });
-  test("sends cancel message to figma when clicking Cancel", async () => {
-    await userEvents.click(screen.getByRole("button", { name: "Cancel" }));
+  test("sends export message to figma when clicking export", async () => {
+    await userEvents.click(screen.getByRole("button", { name: "Export CSV" }));
     expect(window.parent.postMessage).toHaveBeenCalledTimes(1);
     expect(window.parent.postMessage).toHaveBeenCalledWith(
       expect.objectContaining({
-        pluginMessage: { type: "cancel" },
+        pluginMessage: { type: "export-csv-file" },
       }),
       "*"
     );
   });
-  test("reacts to failure message sent from Figma", async () => {
+  test.skip("reacts to failure message sent from Figma", async () => {
     fireEvent(
       window,
       new MessageEvent("message", {

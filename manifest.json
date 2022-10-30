@@ -1,8 +1,8 @@
 {
-  "name": "UITK Template",
-  "id": "uitk-template-id-to-be-replaced",
+  "name": "Content Manager",
+  "id": "figma-content-manager",
   "api": "1.0.0",
-  "editorType": ["figma", "figjam"],
+  "editorType": ["figma"],
   "permissions": [],
   "main": "dist/code.js",
   "ui": "dist/index.html"

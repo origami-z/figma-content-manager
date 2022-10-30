@@ -1,8 +1,12 @@
-import { times150 } from "../utils";
+import { getHeadingLevelNumber, HeadingSettings } from "../utils";
 
-test("1 times 150 equals 150", () => {
-  expect(times150(1)).toEqual(150);
-});
+describe("getHeadingLevelNumber", () => {
+  const headingSetting: HeadingSettings = { h1: 50, h2: 32, h3: 24, h4: 16 }
+  test('body test returns 0', () => {
+    const result = getHeadingLevelNumber(14, headingSetting);
+    expect(result).toBe(0)
+  })
+})
 
 test("figma component resize api mock", () => {
   const component = figma.createComponent();
