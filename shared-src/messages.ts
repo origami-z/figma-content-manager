@@ -4,7 +4,7 @@ export type CsvNodeInfo = {
   characters: string;
   listOption: string;
   headingLevel: string;
-}
+};
 
 export type FileGeneratedToUIMessage = {
   type: "file-generated";
@@ -23,11 +23,10 @@ export type ExportCsvFileToFigmaMessage = {
   type: "export-csv-file";
 };
 
-
 export type UpdateContentWithCsvFileToFigmaMessage = {
-  type: 'update-content-with-csv-file';
+  type: "update-content-with-csv-file";
   csvString: string;
-}
+};
 
 export type PostToFigmaMessage =
   | UiFinishLoadingToFigmaMessage

@@ -6,8 +6,8 @@ export const downloadDataUri = (dataUri: string, fileName: string) => {
   document.body.append(link);
   link.click();
   link.remove();
-  // in case the Blob uses a log of memory 
+  // in case the Blob uses a log of memory
   setTimeout(() => {
-    URL.revokeObjectURL(link.href)
+    URL.revokeObjectURL(link.href);
   }, 7000);
-}
+};
