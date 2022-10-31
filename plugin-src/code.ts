@@ -10,7 +10,7 @@ import {
   getNodeInfoMap,
   parseCsvString,
 } from "./processers/csvProcessor";
-import { sortNodeByPosition } from "./utils";
+import { DEFAULT_HEADING_SETTINGS, sortNodeByPosition } from "./utils";
 
 figma.showUI(__html__, { themeColors: true, height: 340 });
 
@@ -106,7 +106,10 @@ async function exportCsvFile() {
     console.log(notifyMessage);
 
     const processResult = {
-      results: await csvNodeProcessor(firstNode),
+      results: await csvNodeProcessor(firstNode, {
+        ...DEFAULT_HEADING_SETTINGS,
+        topLvlNodeName: firstNode.name,
+      }),
       topLvlNode: firstNode,
     };
     processedInfo.push(processResult);

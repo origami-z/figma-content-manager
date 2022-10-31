@@ -2,18 +2,22 @@ import { CsvNodeInfo } from "../../shared-src";
 import { HeadingSettings, isChildrenMixin, isRectNodeImage } from "../utils";
 
 export type NodeProcessors<T> = {
-  text: (node: TextNode, settings: HeadingSettings) => T | null;
+  text: (node: TextNode, settings: CsvExportSettings) => T | null;
   image: (node: RectangleNode) => T | null;
   children: (
     node: SceneNode & ChildrenMixin,
-    settings: HeadingSettings,
+    settings: CsvExportSettings,
     processors: NodeProcessors<T>
   ) => T | null;
 };
 
+export type CsvExportSettings = HeadingSettings & {
+  topLvlNodeName: string;
+};
+
 export const iterate = <T>(
   node: SceneNode,
-  settings: HeadingSettings,
+  settings: CsvExportSettings,
   processors: NodeProcessors<T>
 ): T | null => {
   // Ignore invisible nodes

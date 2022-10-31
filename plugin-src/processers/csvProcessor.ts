@@ -7,7 +7,12 @@ import {
   replaceTextInTextNode,
   sortNodeByPosition,
 } from "../utils";
-import { CsvNodeInfoMap, iterate, iterateUpdate } from "./iterate";
+import {
+  CsvExportSettings,
+  CsvNodeInfoMap,
+  iterate,
+  iterateUpdate,
+} from "./iterate";
 import { unparse, parse } from "papaparse";
 
 const getListOption = (node: TextNode): string => {
@@ -31,13 +36,14 @@ const getHeadingLevel = (node: TextNode, settings: HeadingSettings) => {
 
 export const csvTextNodeProcess = (
   node: TextNode,
-  settings: HeadingSettings
+  settings: CsvExportSettings
 ): CsvNodeInfo[] => {
   // console.log("textProcessor", node);
   const listOption = getListOption(node);
   const headingLevel = getHeadingLevel(node, settings);
   const nodeInfo = {
     id: "$" + node.id,
+    page: settings.topLvlNodeName,
     name: node.name,
     characters: node.characters,
     listOption,
@@ -48,7 +54,7 @@ export const csvTextNodeProcess = (
 
 export const csvChildrenNodeProcess = (
   node: SceneNode & ChildrenMixin,
-  settings: HeadingSettings,
+  settings: CsvExportSettings,
   processors: any
 ): CsvNodeInfo[] => {
   return node.children
@@ -66,7 +72,7 @@ const emptyProcess = () => null;
 
 export const csvNodeProcessor = async (
   node: SceneNode,
-  settings: HeadingSettings = DEFAULT_HEADING_SETTINGS
+  settings: CsvExportSettings
 ): Promise<CsvNodeInfo[]> => {
   return (
     iterate<CsvNodeInfo[]>(node, settings, {
