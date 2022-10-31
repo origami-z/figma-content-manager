@@ -1,5 +1,11 @@
+type Id = string;
+
 export type CsvNodeInfo = {
-  id: string;
+  /**
+   * Figma node.id prefixed with $.
+   * This is to prevent Excel interpret id like "1:2" to time, which will have additional 0 after save.
+   */
+  id: `${Id}`;
   name: string;
   characters: string;
   listOption: string;

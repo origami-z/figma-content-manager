@@ -5,6 +5,13 @@ export type HeadingSettings = {
   h4: number;
 };
 
+export const DEFAULT_HEADING_SETTINGS: HeadingSettings = {
+  h1: 36,
+  h2: 28,
+  h3: 22,
+  h4: 18,
+};
+
 export const isChildrenMixin = (node: any): node is ChildrenMixin => {
   return !!(node as any).children;
 };
@@ -18,21 +25,21 @@ export const isRectNodeImage = (node: RectangleNode): boolean => {
 };
 
 /**
- * Gets heading level number, e.g. font size 50 => heading 1
+ * Gets heading level number, e.g. font size 36 => heading 1
  */
 export const getHeadingLevelNumber = (
   fontSize: number,
   settings: HeadingSettings
 ): number => {
-  return fontSize > settings.h1
-    ? 1
-    : fontSize > settings.h2
-    ? 2
-    : fontSize > settings.h3
-    ? 3
-    : fontSize > settings.h4
+  return fontSize < settings.h4
+    ? 0
+    : fontSize < settings.h3
     ? 4
-    : 0;
+    : fontSize < settings.h2
+    ? 3
+    : fontSize < settings.h1
+    ? 2
+    : 1;
 };
 
 export const sortNodeByPosition = (a: SceneNode, b: SceneNode) => {

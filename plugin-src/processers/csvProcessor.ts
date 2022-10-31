@@ -1,5 +1,6 @@
 import { CsvNodeInfo } from "../../shared-src/messages";
 import {
+  DEFAULT_HEADING_SETTINGS,
   getHeadingLevelNumber,
   HeadingSettings,
   loadAllFonts,
@@ -32,10 +33,11 @@ export const csvTextNodeProcess = (
   node: TextNode,
   settings: HeadingSettings
 ): CsvNodeInfo[] => {
+  // console.log("textProcessor", node);
   const listOption = getListOption(node);
   const headingLevel = getHeadingLevel(node, settings);
   const nodeInfo = {
-    id: node.id,
+    id: "$" + node.id,
     name: node.name,
     characters: node.characters,
     listOption,
@@ -64,7 +66,7 @@ const emptyProcess = () => null;
 
 export const csvNodeProcessor = async (
   node: SceneNode,
-  settings: HeadingSettings = { h1: 50, h2: 30, h3: 20, h4: 15 }
+  settings: HeadingSettings = DEFAULT_HEADING_SETTINGS
 ): Promise<CsvNodeInfo[]> => {
   return (
     iterate<CsvNodeInfo[]>(node, settings, {
@@ -79,6 +81,7 @@ export const csvResultTransformer = async (
   resultsPerNode: { results: CsvNodeInfo[]; topLvlNode: SceneNode }[]
 ): Promise<string> => {
   const rows = resultsPerNode.flatMap((x) => x.results);
+  console.log("csvResultTransformer rows", rows);
   const rowsString = unparse(rows, { header: true });
   return "data:text/csv;charset=utf-8," + encodeURIComponent(rowsString);
 };
@@ -98,7 +101,13 @@ export const parseCsvString = (input: string) => {
 
 export const getNodeInfoMap = (nodeInfos: CsvNodeInfo[]): CsvNodeInfoMap => {
   let map: CsvNodeInfoMap = {};
-  nodeInfos.forEach((x) => (map[x.id] = x));
+  nodeInfos.forEach((x) => {
+    const nodeInfoWithNormalId = {
+      ...x,
+      id: x.id.replace(/^\$/, ""), // Replace leading $. See `CsvNodeInfo.id`.
+    };
+    map[nodeInfoWithNormalId.id] = nodeInfoWithNormalId;
+  });
   return map;
 };
 
@@ -109,10 +118,10 @@ export const csvTextNodeUpdater = async (
 ): Promise<string[]> => {
   const nodeInfo = nodeInfoMap[node.id];
   if (!nodeInfo) {
+    console.warn("Skip un-found node in map: ", node.id, node.name);
     return []; //  false; // Not updated
   }
   const { id, name, characters, listOption, headingLevel } = nodeInfo;
-
 
   const listOptionFromNode = getListOption(node);
   const headingLevelFromNode = getHeadingLevel(node, settings);
@@ -152,11 +161,12 @@ export const csvChildrenNodeUpdater = async (
 export const csvNodeUpdater = async (
   node: SceneNode,
   nodeInfoMap: CsvNodeInfoMap,
-  settings: HeadingSettings = { h1: 50, h2: 30, h3: 20, h4: 15 }
+  settings: HeadingSettings = DEFAULT_HEADING_SETTINGS
 ) => {
   const results = await iterateUpdate(node, nodeInfoMap, settings, {
     text: csvTextNodeUpdater,
     children: csvChildrenNodeUpdater,
   });
   console.log("csvNodeUpdater updated nodes", results);
+  return results?.length;
 };

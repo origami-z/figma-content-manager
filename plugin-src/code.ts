@@ -54,7 +54,7 @@ async function updateWithCsvFile(csvString: string) {
     notificationHandle = figma.notify(notifyMessage);
     console.log(notifyMessage);
 
-    await csvNodeUpdater(firstNode, infoMap);
+    const result = await csvNodeUpdater(firstNode, infoMap);
 
     if (nodes.length > 1) {
       setTimeout(() => {
@@ -62,7 +62,13 @@ async function updateWithCsvFile(csvString: string) {
       }, 20);
     } else {
       notificationHandle?.cancel();
-      notificationHandle = figma.notify("Update finished");
+      if (result) {
+        notificationHandle = figma.notify(
+          `Updated ${result} layer` + (result > 1 ? "s" : "")
+        );
+      } else {
+        notificationHandle = figma.notify("Nothing updated");
+      }
     }
   }
 

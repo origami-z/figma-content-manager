@@ -1,5 +1,6 @@
 body {
   margin: 0;
+  overflow: hidden;
 }
 
 #root,
@@ -8,7 +9,7 @@ body {
 }
 
 .appRoot.appRoot {
-  background: var(--uitk-container-background-high);
+  background: var(--uitk-container-background-medium);
   /* Vertical align */
   justify-content: center;
 }
