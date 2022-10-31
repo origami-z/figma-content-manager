@@ -24,7 +24,7 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
 
 async function updateWithCsvFile(csvString: string) {
   if (figma.currentPage.selection.length === 0) {
-    figma.notify("Please select something to export 😅");
+    figma.notify("Please select something to update 😅");
     return;
   }
 
@@ -43,6 +43,8 @@ async function updateWithCsvFile(csvString: string) {
 
   const infoMap = getNodeInfoMap(parsed);
 
+  let updatedLayersCount = 0;
+
   // We want to send figma.notify message between frame processing
   async function processFirstNode(nodes: SceneNode[]) {
     const firstNode = nodes[0];
@@ -54,7 +56,7 @@ async function updateWithCsvFile(csvString: string) {
     notificationHandle = figma.notify(notifyMessage);
     console.log(notifyMessage);
 
-    const result = await csvNodeUpdater(firstNode, infoMap);
+    updatedLayersCount += (await csvNodeUpdater(firstNode, infoMap)) || 0;
 
     if (nodes.length > 1) {
       setTimeout(() => {
@@ -62,9 +64,10 @@ async function updateWithCsvFile(csvString: string) {
       }, 20);
     } else {
       notificationHandle?.cancel();
-      if (result) {
+      if (updatedLayersCount) {
         notificationHandle = figma.notify(
-          `Updated ${result} layer` + (result > 1 ? "s" : "")
+          `Updated ${updatedLayersCount} layer` +
+            (updatedLayersCount > 1 ? "s" : "" + " 🌟")
         );
       } else {
         notificationHandle = figma.notify("Nothing updated");

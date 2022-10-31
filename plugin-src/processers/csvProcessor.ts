@@ -16,10 +16,7 @@ import {
 import { unparse, parse } from "papaparse";
 
 const getListOption = (node: TextNode): string => {
-  const fullListOption = node.getRangeListOptions(
-    0,
-    node.characters.length - 1
-  );
+  const fullListOption = node.getRangeListOptions(0, node.characters.length);
   if (fullListOption === figma.mixed) {
     return "MIXED";
   }
@@ -27,7 +24,7 @@ const getListOption = (node: TextNode): string => {
 };
 
 const getHeadingLevel = (node: TextNode, settings: HeadingSettings) => {
-  const fullFontSize = node.getRangeFontSize(0, node.characters.length - 1);
+  const fullFontSize = node.getRangeFontSize(0, node.characters.length);
   if (fullFontSize === figma.mixed) {
     return "MIXED";
   }
@@ -117,6 +114,41 @@ export const getNodeInfoMap = (nodeInfos: CsvNodeInfo[]): CsvNodeInfoMap => {
   return map;
 };
 
+/**
+ * Update characters if necessary, returns true if made update to node
+ */
+const updateCharacters = async (
+  node: TextNode,
+  nodeInfo: CsvNodeInfo
+): Promise<boolean> => {
+  if (node.characters === nodeInfo.characters) {
+    return false;
+  }
+
+  await loadAllFonts(node);
+  replaceTextInTextNode(node, 0, node.characters.length, nodeInfo.characters);
+  return true;
+};
+
+const updateListOption = async (
+  node: TextNode,
+  nodeInfo: CsvNodeInfo
+): Promise<boolean> => {
+  if (getListOption(node) === nodeInfo.listOption) {
+    return false;
+  }
+  if (["ORDERED", "UNORDERED", "NONE"].includes(nodeInfo.listOption)) {
+    await loadAllFonts(node);
+    node.setRangeListOptions(0, node.characters.length, {
+      type: nodeInfo.listOption as any,
+    });
+    return true;
+  } else {
+    console.warn("Ignoring unknown list option:", nodeInfo.listOption);
+    return false;
+  }
+};
+
 export const csvTextNodeUpdater = async (
   node: TextNode,
   nodeInfoMap: CsvNodeInfoMap,
@@ -127,18 +159,16 @@ export const csvTextNodeUpdater = async (
     console.warn("Skip un-found node in map: ", node.id, node.name);
     return []; //  false; // Not updated
   }
-  const { id, name, characters, listOption, headingLevel } = nodeInfo;
 
-  const listOptionFromNode = getListOption(node);
-  const headingLevelFromNode = getHeadingLevel(node, settings);
+  const updated = [
+    await updateCharacters(node, nodeInfo),
+    await updateListOption(node, nodeInfo),
+  ].some((x) => !!x);
 
-  // TODO: also check other info updates
-  if (node.characters === nodeInfo.characters) {
-    return []; //  false; // Not updated
-  } else {
-    await loadAllFonts(node);
-    replaceTextInTextNode(node, 0, node.characters.length, characters);
+  if (updated) {
     return [node.id];
+  } else {
+    return [];
   }
 };
 
