@@ -31,6 +31,17 @@ const getHeadingLevel = (node: TextNode, settings: HeadingSettings) => {
   return getHeadingLevelNumber(fullFontSize, settings).toString();
 };
 
+/**
+ * Gets first `max` number of characters of a string, if contains more,
+ */
+const getStringWithEllipsis = (text: string, max = 20): string => {
+  if (text.length > max) {
+    return text.substring(0, max) + "...";
+  } else {
+    return text;
+  }
+};
+
 export const csvTextNodeProcess = (
   node: TextNode,
   settings: CsvExportSettings
@@ -41,10 +52,11 @@ export const csvTextNodeProcess = (
   // console.log("textProcessor", node);
   const listOption = getListOption(node);
   const headingLevel = getHeadingLevel(node, settings);
+
   const nodeInfo = {
     id: "$" + node.id,
     page: settings.topLvlNodeName,
-    name: node.name,
+    name: getStringWithEllipsis(node.name),
     characters: node.characters,
     listOption,
     headingLevel,
