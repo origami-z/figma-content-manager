@@ -3,6 +3,20 @@ body {
   overflow: hidden;
 }
 
+body {
+  background: var(--figma-color-bg);
+}
+
+.figma-light,
+.uitk-light {
+  color-scheme: light;
+}
+
+.figma-dark,
+.uitk-dark {
+  color-scheme: dark;
+}
+
 #root,
 .appRoot {
   height: 100%;
@@ -12,14 +26,6 @@ body {
   background: var(--uitk-container-background-medium);
   /* Vertical align */
   justify-content: center;
-}
-
-.uitk-light {
-  color-scheme: light;
-}
-
-.uitk-dark {
-  color-scheme: dark;
 }
 
 .uitk-dark .appRoot {

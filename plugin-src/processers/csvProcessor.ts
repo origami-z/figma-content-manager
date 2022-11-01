@@ -35,6 +35,9 @@ export const csvTextNodeProcess = (
   node: TextNode,
   settings: CsvExportSettings
 ): CsvNodeInfo[] => {
+  if (node.characters.length === 0) {
+    return [];
+  }
   // console.log("textProcessor", node);
   const listOption = getListOption(node);
   const headingLevel = getHeadingLevel(node, settings);
