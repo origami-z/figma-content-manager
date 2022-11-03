@@ -3,10 +3,11 @@
     "target": "es6",
     "lib": ["es6"],
     "strict": true,
+    "skipLibCheck": true,
     "typeRoots": ["../../node_modules/@jest", "../../node_modules/@types"],
     "moduleResolution": "node",
     "esModuleInterop": true,
     "jsx": "react"
   },
-  "include": ["./**/*.ts"]
+  "include": ["./**/*.tsx", "./**/*.ts"]
 }
