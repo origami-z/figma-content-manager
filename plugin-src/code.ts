@@ -13,7 +13,7 @@ import {
   csvResultTransformer,
   getNodeInfoMap,
   parseCsvString,
-} from "./processers/csvProcessor";
+} from "./processors/csvProcessor";
 import { DEFAULT_HEADING_SETTINGS, sortNodeByPosition } from "./utils";
 
 let parsedCsv: ParseResult<CsvNodeInfoWithLang> | null = null;

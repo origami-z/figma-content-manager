@@ -17,4 +17,5 @@ class ComponentNode {
 
 global.figma = {
   createComponent: () => new ComponentNode(),
+  createText: jest.fn(),
 };
