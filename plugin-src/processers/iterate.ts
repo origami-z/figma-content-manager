@@ -1,4 +1,4 @@
-import { CsvNodeInfo } from "../../shared-src";
+import { CsvNodeInfoWithProperId } from "../../shared-src";
 import { HeadingSettings, isChildrenMixin, isRectNodeImage } from "../utils";
 
 export type NodeProcessors<T> = {
@@ -39,19 +39,22 @@ export const iterate = <T>(
 };
 
 export type CsvNodeInfoMap = {
-  [id: string]: CsvNodeInfo;
+  [id: string]: CsvNodeInfoWithProperId;
 };
 
+export type UpdaterSettings = HeadingSettings & {
+  selectedLang?: string;
+};
 export type NodeUpdater<T> = {
   text: (
     node: TextNode,
     nodeInfoMap: CsvNodeInfoMap,
-    settings: HeadingSettings
+    settings: UpdaterSettings
   ) => Promise<T | null>;
   children: (
     node: SceneNode & ChildrenMixin,
     nodeInfoMap: CsvNodeInfoMap,
-    settings: HeadingSettings,
+    settings: UpdaterSettings,
     updaters: NodeUpdater<T>
   ) => Promise<T | null>;
 };
@@ -59,7 +62,7 @@ export type NodeUpdater<T> = {
 export const iterateUpdate = async <T>(
   node: SceneNode,
   nodeInfoMap: CsvNodeInfoMap,
-  settings: HeadingSettings,
+  settings: UpdaterSettings,
   updaters: NodeUpdater<T>
 ): Promise<T | null> => {
   // Ignore invisible nodes

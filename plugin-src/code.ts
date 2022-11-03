@@ -1,5 +1,9 @@
+import { ParseResult } from "papaparse";
 import {
   CsvNodeInfo,
+  CsvNodeInfoWithLang,
+  CSV_HEADER_FIELDS,
+  DEFAULT_LANG,
   PostToFigmaMessage,
   PostToUIMessage,
 } from "../shared-src/messages";
@@ -12,19 +16,30 @@ import {
 } from "./processers/csvProcessor";
 import { DEFAULT_HEADING_SETTINGS, sortNodeByPosition } from "./utils";
 
+let parsedCsv: ParseResult<CsvNodeInfoWithLang> | null = null;
+
 figma.showUI(__html__, { themeColors: true, height: 340 });
 
 figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
   if (msg.type === "export-csv-file") {
     await exportCsvFile();
-  } else if (msg.type === "update-content-with-csv-file") {
-    await updateWithCsvFile(msg.csvString);
+  } else if (msg.type === "detect-available-lang-from-csv") {
+    await parseCsvAndDetectLangs(msg.csvString);
+  } else if (msg.type === "update-content-with-lang") {
+    await updateWithLang(msg.lang);
   }
 };
 
-async function updateWithCsvFile(csvString: string) {
+async function updateWithLang(lang: string) {
   if (figma.currentPage.selection.length === 0) {
     figma.notify("Please select something to update 😅");
+    return;
+  }
+
+  if (parsedCsv === null) {
+    figma.notify("Parsed CSV cannot be found, please report a bug", {
+      error: true,
+    });
     return;
   }
 
@@ -33,15 +48,12 @@ async function updateWithCsvFile(csvString: string) {
     .sort(sortNodeByPosition);
 
   const totalTopLvlNodes = topLvlNodes.length;
-  const parsed = parseCsvString(csvString);
 
-  if (parsed === null) {
-    return;
-  }
+  const { data, meta } = parsedCsv;
 
   let notificationHandle: NotificationHandler = figma.notify("Update start...");
 
-  const infoMap = getNodeInfoMap(parsed);
+  const infoMap = getNodeInfoMap(data);
 
   let updatedLayersCount = 0;
 
@@ -56,7 +68,11 @@ async function updateWithCsvFile(csvString: string) {
     notificationHandle = figma.notify(notifyMessage);
     console.log(notifyMessage);
 
-    updatedLayersCount += (await csvNodeUpdater(firstNode, infoMap)) || 0;
+    updatedLayersCount +=
+      (await csvNodeUpdater(firstNode, infoMap, {
+        ...DEFAULT_HEADING_SETTINGS,
+        selectedLang: lang,
+      })) || 0;
 
     if (nodes.length > 1) {
       setTimeout(() => {
@@ -76,6 +92,37 @@ async function updateWithCsvFile(csvString: string) {
   }
 
   processFirstNode(topLvlNodes);
+}
+
+async function parseCsvAndDetectLangs(csvString: string) {
+  const parsed = parseCsvString<CsvNodeInfoWithLang>(csvString);
+  if (parsed === null) {
+    figma.notify("Can not parse CSV, check your file and try again?", {
+      error: true,
+    });
+    return;
+  }
+
+  const allFields = parsed.meta.fields;
+
+  if (allFields === undefined) {
+    figma.notify("Can not parse CSV available fields, check your file", {
+      error: true,
+    });
+    return;
+  }
+
+  parsedCsv = parsed;
+
+  const additionalLangs = allFields.filter(
+    (x) => !CSV_HEADER_FIELDS.includes(x)
+  );
+  console.log({ allFields, additionalLangs });
+
+  figma.ui.postMessage({
+    type: "available-lang-from-csv",
+    langs: [DEFAULT_LANG, ...additionalLangs],
+  } as PostToUIMessage);
 }
 
 async function exportCsvFile() {

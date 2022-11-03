@@ -1,4 +1,7 @@
-import { CsvNodeInfo } from "../../shared-src/messages";
+import {
+  CsvNodeInfo,
+  CsvNodeInfoWithProperId,
+} from "../../shared-src/messages";
 import {
   DEFAULT_HEADING_SETTINGS,
   getHeadingLevelNumber,
@@ -12,6 +15,7 @@ import {
   CsvNodeInfoMap,
   iterate,
   iterateUpdate,
+  UpdaterSettings,
 } from "./iterate";
 import { unparse, parse } from "papaparse";
 
@@ -104,8 +108,8 @@ export const csvResultTransformer = async (
   return "data:text/csv;charset=utf-8," + encodeURIComponent(rowsString);
 };
 
-export const parseCsvString = (input: string) => {
-  const parseResult = parse<CsvNodeInfo>(input, {
+export const parseCsvString = <T extends CsvNodeInfo>(input: string) => {
+  const parseResult = parse<T>(input, {
     header: true,
   });
 
@@ -114,10 +118,12 @@ export const parseCsvString = (input: string) => {
     return null;
   }
   console.log("parseCsvString success", parseResult.data);
-  return parseResult.data;
+  return parseResult;
 };
 
-export const getNodeInfoMap = (nodeInfos: CsvNodeInfo[]): CsvNodeInfoMap => {
+export const getNodeInfoMap = <T extends CsvNodeInfo>(
+  nodeInfos: T[]
+): CsvNodeInfoMap => {
   let map: CsvNodeInfoMap = {};
   nodeInfos.forEach((x) => {
     const nodeInfoWithNormalId = {
@@ -129,19 +135,34 @@ export const getNodeInfoMap = (nodeInfos: CsvNodeInfo[]): CsvNodeInfoMap => {
   return map;
 };
 
+const getCharToUse = (
+  nodeInfo: CsvNodeInfoWithProperId,
+  settings: UpdaterSettings
+) => {
+  if (settings.selectedLang) {
+    if (nodeInfo[settings.selectedLang]) {
+      return nodeInfo[settings.selectedLang];
+    } else {
+      return nodeInfo.characters;
+    }
+  } else {
+    return nodeInfo.characters;
+  }
+};
+
 /**
  * Update characters if necessary, returns true if made update to node
  */
 const updateCharacters = async (
   node: TextNode,
-  nodeInfo: CsvNodeInfo
+  characters: string
 ): Promise<boolean> => {
-  if (node.characters === nodeInfo.characters) {
+  if (node.characters === characters) {
     return false;
   }
 
   await loadAllFonts(node);
-  replaceTextInTextNode(node, 0, node.characters.length, nodeInfo.characters);
+  replaceTextInTextNode(node, 0, node.characters.length, characters);
   return true;
 };
 
@@ -167,7 +188,7 @@ const updateListOption = async (
 export const csvTextNodeUpdater = async (
   node: TextNode,
   nodeInfoMap: CsvNodeInfoMap,
-  settings: HeadingSettings
+  settings: UpdaterSettings
 ): Promise<string[]> => {
   const nodeInfo = nodeInfoMap[node.id];
   if (!nodeInfo) {
@@ -175,8 +196,10 @@ export const csvTextNodeUpdater = async (
     return []; //  false; // Not updated
   }
 
+  const newChar = getCharToUse(nodeInfo, settings);
+
   const updated = [
-    await updateCharacters(node, nodeInfo),
+    await updateCharacters(node, newChar),
     await updateListOption(node, nodeInfo),
   ].some((x) => !!x);
 
@@ -190,7 +213,7 @@ export const csvTextNodeUpdater = async (
 export const csvChildrenNodeUpdater = async (
   node: SceneNode & ChildrenMixin,
   nodeInfoMap: CsvNodeInfoMap,
-  settings: HeadingSettings,
+  settings: UpdaterSettings,
   processors: any
 ) => {
   const results = [];
@@ -208,11 +231,10 @@ export const csvChildrenNodeUpdater = async (
   }
   return results;
 };
-
 export const csvNodeUpdater = async (
   node: SceneNode,
   nodeInfoMap: CsvNodeInfoMap,
-  settings: HeadingSettings = DEFAULT_HEADING_SETTINGS
+  settings: UpdaterSettings = DEFAULT_HEADING_SETTINGS
 ) => {
   const results = await iterateUpdate(node, nodeInfoMap, settings, {
     text: csvTextNodeUpdater,

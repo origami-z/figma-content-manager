@@ -31,3 +31,7 @@ body {
 .uitk-dark .appRoot {
   color: var(--uitk-text-primary-foreground);
 }
+
+.language-formField {
+  --uitkFormField-width: 160px;
+}

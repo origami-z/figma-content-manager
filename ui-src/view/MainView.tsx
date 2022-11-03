@@ -1,13 +1,17 @@
-import { Button, StackLayout } from "@jpmorganchase/uitk-core";
-import { FileDropZone } from "@jpmorganchase/uitk-lab";
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { PostToFigmaMessage, PostToUIMessage } from "../../shared-src";
+import { Button, FormField, StackLayout } from "@jpmorganchase/uitk-core";
+import { Dropdown, FileDropZone } from "@jpmorganchase/uitk-lab";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+  DEFAULT_LANG,
+  PostToFigmaMessage,
+  PostToUIMessage,
+} from "../../shared-src";
 import { downloadDataUri } from "../components/utils";
 
 export const MainView = () => {
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [success, setSuccess] = useState<boolean | undefined>(undefined);
   const [csvFile, setCsvFile] = useState<File | null>(null);
+  const [csvLangs, setCsvLangs] = useState<string[]>([DEFAULT_LANG]);
+  const [selectedLang, setSelectedLang] = useState<string>(DEFAULT_LANG);
 
   const handleWindowMessage = useCallback(
     (event: {
@@ -22,6 +26,10 @@ export const MainView = () => {
             const { data, defaultFileName } = pluginMessage;
             downloadDataUri(data, defaultFileName);
             break;
+          }
+          case "available-lang-from-csv": {
+            const { langs } = pluginMessage;
+            setCsvLangs(langs);
           }
           default:
         }
@@ -49,16 +57,30 @@ export const MainView = () => {
   };
 
   const onUpdateCsv = () => {
-    if (csvFile !== null) {
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "update-content-with-lang",
+          lang: selectedLang,
+        } as PostToFigmaMessage,
+      },
+      "*"
+    );
+  };
+
+  const onFileAccepted = (files: readonly File[]) => {
+    if (files.length && files[0] !== null) {
+      const csv = files[0];
+      setCsvFile(csv);
       var reader = new FileReader();
-      reader.readAsText(csvFile, "UTF-8");
+      reader.readAsText(csv, "UTF-8");
       reader.onload = function (evt) {
         const fileReadString = evt.target?.result as any;
         console.log({ fileReadString });
         parent.postMessage(
           {
             pluginMessage: {
-              type: "update-content-with-csv-file",
+              type: "detect-available-lang-from-csv",
               csvString: fileReadString,
             } as PostToFigmaMessage,
           },
@@ -69,12 +91,6 @@ export const MainView = () => {
         console.error("error reading file");
         setCsvFile(null);
       };
-    }
-  };
-
-  const onFileAccepted = (files: readonly File[]) => {
-    if (files.length) {
-      setCsvFile(files[0]);
     } else {
       setCsvFile(null);
     }
@@ -90,7 +106,23 @@ export const MainView = () => {
           onFilesAccepted={onFileAccepted}
         />
       ) : (
-        <p>{csvFile.name}</p>
+        <StackLayout gap={1}>
+          <p>{csvFile.name}</p>
+          <FormField
+            label="Language"
+            className="uitkEmphasisHigh language-formField"
+            fullWidth={false}
+          >
+            <Dropdown
+              source={csvLangs}
+              selected={selectedLang}
+              onSelectionChange={(_, selected) =>
+                selected && setSelectedLang(selected)
+              }
+              ListProps={{ displayedItemCount: 3 }}
+            />
+          </FormField>
+        </StackLayout>
       )}
       <Button onClick={onUpdateCsv} disabled={csvFile === null}>
         Update
