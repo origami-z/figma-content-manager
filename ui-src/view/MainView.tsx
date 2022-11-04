@@ -101,7 +101,7 @@ export const MainView = () => {
       <Button onClick={onExportCsv}>Export CSV</Button>
       {csvFile === null ? (
         <FileDropZone
-          accept="csv"
+          accept=".csv"
           onFilesRejected={() => setCsvFile(null)}
           onFilesAccepted={onFileAccepted}
         />
