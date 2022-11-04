@@ -109,7 +109,7 @@ export const MainView = () => {
         <StackLayout gap={1}>
           <p>{csvFile.name}</p>
           <FormField
-            label="Language"
+            label="Version"
             className="uitkEmphasisHigh language-formField"
             fullWidth={false}
           >
