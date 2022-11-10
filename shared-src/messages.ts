@@ -1,5 +1,10 @@
 type Id = string;
 
+type StoredCopyVersion = {
+  name: string;
+  characters: string;
+};
+
 // We need to keep an array so that additional headers being added by the user can be detected
 export const CSV_HEADER_FIELDS = [
   "id",
@@ -26,7 +31,7 @@ export type CsvNodeInfo = {
 export type CsvNodeInfoWithProperId = Omit<CsvNodeInfo, "id"> & {
   id: Id;
 } & {
-  [lang: string]: string;
+  [version: string]: string;
 };
 export const DEFAULT_LANG = "Default";
 
@@ -66,6 +71,7 @@ export type DetectAvailableLangFromCSVToFigmaMessage = {
 export type UpdateContentWithLangToFigmaMessage = {
   type: "update-content-with-lang";
   lang: string;
+  persistInFigma: boolean;
 };
 
 export type PostToFigmaMessage =

@@ -5,5 +5,12 @@
   "editorType": ["figma"],
   "permissions": [],
   "main": "dist/code.js",
-  "ui": "dist/index.html"
+  "ui": "dist/index.html",
+  "relaunchButtons": [
+    {
+      "command": "review-revision",
+      "name": "Review copy revisions",
+      "multipleSelection": true
+    }
+  ]
 }

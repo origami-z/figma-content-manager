@@ -8,6 +8,7 @@ import {
   HeadingSettings,
   loadAllFonts,
   replaceTextInTextNode,
+  setRelaunchButton,
   sortNodeByPosition,
 } from "../utils";
 import {
@@ -204,6 +205,7 @@ export const csvTextNodeUpdater = async (
   ].some((x) => !!x);
 
   if (updated) {
+    setRelaunchButton(node);
     return [node.id];
   } else {
     return [];

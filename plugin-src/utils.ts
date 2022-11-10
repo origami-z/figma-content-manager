@@ -1,3 +1,7 @@
+export const PLUGIN_DATA_SHARED_NAMESPACE = "CONTENT_COPY";
+export const PLUGIN_DATA_KEY_PERSISTED_DATA = "PERSISTED_DATA";
+export const PLUGIN_RELAUNCH_KEY_REVIEW_REVISION = "review-revision";
+
 export type HeadingSettings = {
   h1: number;
   h2: number;
@@ -73,4 +77,27 @@ export const replaceTextInTextNode = (
     replaceStartIndex + textToInsert.length,
     replaceStartIndex + textToInsert.length + lengthToBeReplaced
   );
+};
+
+export const setRelaunchButton = (node: SceneNode) => {
+  // Empty string to just show the button
+  node.setRelaunchData({ [PLUGIN_RELAUNCH_KEY_REVIEW_REVISION]: "" });
+};
+
+export const persistInFigma = (data: string) => {
+  console.log("persistInFigma", data);
+  figma.root.setSharedPluginData(
+    PLUGIN_DATA_SHARED_NAMESPACE,
+    PLUGIN_DATA_KEY_PERSISTED_DATA,
+    data
+  );
+};
+
+export const readPersistedData = () => {
+  const persistedData = figma.root.getSharedPluginData(
+    PLUGIN_DATA_SHARED_NAMESPACE,
+    PLUGIN_DATA_KEY_PERSISTED_DATA
+  );
+  console.log("readPersistedData", persistedData);
+  return persistedData;
 };

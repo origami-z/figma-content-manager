@@ -14,7 +14,13 @@ import {
   getNodeInfoMap,
   parseCsvString,
 } from "./processors/csvProcessor";
-import { DEFAULT_HEADING_SETTINGS, sortNodeByPosition } from "./utils";
+import {
+  DEFAULT_HEADING_SETTINGS,
+  persistInFigma,
+  PLUGIN_RELAUNCH_KEY_REVIEW_REVISION,
+  readPersistedData,
+  sortNodeByPosition,
+} from "./utils";
 
 let parsedCsv: ParseResult<CsvNodeInfoWithLang> | null = null;
 
@@ -24,11 +30,54 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
   if (msg.type === "export-csv-file") {
     await exportCsvFile();
   } else if (msg.type === "detect-available-lang-from-csv") {
-    await parseCsvAndDetectLangs(msg.csvString);
+    await parseCsvAndDetectRevision(msg.csvString);
   } else if (msg.type === "update-content-with-lang") {
     await updateWithLang(msg.lang);
+    if (msg.persistInFigma) {
+      persistDataInFigma();
+    }
   }
 };
+
+if (figma.command) {
+  // Relaunching from relaunch button
+  switch (figma.command) {
+    case PLUGIN_RELAUNCH_KEY_REVIEW_REVISION: {
+      const persistedData = readPersistedData();
+      if (persistedData) {
+        parsedCsv = JSON.parse(persistedData);
+        sendAvailableRevisionToUI();
+      }
+      break;
+    }
+    default:
+      console.error("Unknown figma command", figma.command);
+  }
+}
+
+function persistDataInFigma() {
+  if (parsedCsv !== null) {
+    persistInFigma(JSON.stringify(parsedCsv));
+  }
+}
+
+function sendAvailableRevisionToUI() {
+  if (parsedCsv === null) {
+    console.error("sendUIAvailableRevision parsedCsv is null");
+    return;
+  }
+  const allFields = parsedCsv.meta.fields || [];
+
+  const additionalLangs = allFields.filter(
+    (x) => !CSV_HEADER_FIELDS.includes(x)
+  );
+  console.log({ allFields, additionalLangs });
+
+  figma.ui.postMessage({
+    type: "available-lang-from-csv",
+    langs: [DEFAULT_LANG, ...additionalLangs],
+  } as PostToUIMessage);
+}
 
 async function updateWithLang(lang: string) {
   if (figma.currentPage.selection.length === 0) {
@@ -94,7 +143,7 @@ async function updateWithLang(lang: string) {
   processFirstNode(topLvlNodes);
 }
 
-async function parseCsvAndDetectLangs(csvString: string) {
+async function parseCsvAndDetectRevision(csvString: string) {
   const parsed = parseCsvString<CsvNodeInfoWithLang>(csvString);
   if (parsed === null) {
     figma.notify("Can not parse CSV, check your file and try again?", {
@@ -114,15 +163,7 @@ async function parseCsvAndDetectLangs(csvString: string) {
 
   parsedCsv = parsed;
 
-  const additionalLangs = allFields.filter(
-    (x) => !CSV_HEADER_FIELDS.includes(x)
-  );
-  console.log({ allFields, additionalLangs });
-
-  figma.ui.postMessage({
-    type: "available-lang-from-csv",
-    langs: [DEFAULT_LANG, ...additionalLangs],
-  } as PostToUIMessage);
+  sendAvailableRevisionToUI();
 }
 
 async function exportCsvFile() {

@@ -1,4 +1,9 @@
-import { Button, FormField, StackLayout } from "@jpmorganchase/uitk-core";
+import {
+  Button,
+  Checkbox,
+  FormField,
+  StackLayout,
+} from "@jpmorganchase/uitk-core";
 import { Dropdown, FileDropZone } from "@jpmorganchase/uitk-lab";
 import React, { useCallback, useEffect, useState } from "react";
 import {
@@ -10,8 +15,9 @@ import { downloadDataUri } from "../components/utils";
 
 export const MainView = () => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
-  const [csvLangs, setCsvLangs] = useState<string[]>([DEFAULT_LANG]);
+  const [csvLangs, setCsvLangs] = useState<string[]>([]);
   const [selectedLang, setSelectedLang] = useState<string>(DEFAULT_LANG);
+  const [persistChecked, setPersistChecked] = useState(true);
 
   const handleWindowMessage = useCallback(
     (event: {
@@ -62,6 +68,7 @@ export const MainView = () => {
         pluginMessage: {
           type: "update-content-with-lang",
           lang: selectedLang,
+          persistInFigma: persistChecked,
         } as PostToFigmaMessage,
       },
       "*"
@@ -96,6 +103,8 @@ export const MainView = () => {
     }
   };
 
+  const revisionsAvailable = csvLangs.length > 0;
+
   return (
     <StackLayout className="appRoot" align="center">
       <Button onClick={onExportCsv}>Export CSV</Button>
@@ -108,23 +117,30 @@ export const MainView = () => {
       ) : (
         <StackLayout gap={1}>
           <p>{csvFile.name}</p>
-          <FormField
-            label="Version"
-            className="uitkEmphasisHigh language-formField"
-            fullWidth={false}
-          >
-            <Dropdown
-              source={csvLangs}
-              selected={selectedLang}
-              onSelectionChange={(_, selected) =>
-                selected && setSelectedLang(selected)
-              }
-              ListProps={{ displayedItemCount: 3 }}
-            />
-          </FormField>
+          <Checkbox
+            label="Persist in Figma"
+            checked={persistChecked}
+            onChange={(_, check) => setPersistChecked(check)}
+          />
         </StackLayout>
       )}
-      <Button onClick={onUpdateCsv} disabled={csvFile === null}>
+      {revisionsAvailable && (
+        <FormField
+          label="Version"
+          className="uitkEmphasisHigh language-formField"
+          fullWidth={false}
+        >
+          <Dropdown
+            source={csvLangs}
+            selected={selectedLang}
+            onSelectionChange={(_, selected) =>
+              selected && setSelectedLang(selected)
+            }
+            ListProps={{ displayedItemCount: 3 }}
+          />
+        </FormField>
+      )}
+      <Button onClick={onUpdateCsv} disabled={!revisionsAvailable}>
         Update
       </Button>
     </StackLayout>
