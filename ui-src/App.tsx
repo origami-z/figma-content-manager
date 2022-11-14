@@ -2,7 +2,7 @@ import { ToolkitProvider } from "@jpmorganchase/uitk-core";
 import React, { useEffect } from "react";
 import { PostToFigmaMessage } from "../shared-src";
 import { useFigmaPluginTheme } from "./components/useFigmaPluginTheme";
-import { MainView } from "./view/MainView";
+import { TabsView } from "./view/TabsView";
 
 import "./App.css";
 
@@ -22,7 +22,7 @@ function App() {
 
   return (
     <ToolkitProvider mode={theme}>
-      <MainView />
+      <TabsView />
     </ToolkitProvider>
   );
 }

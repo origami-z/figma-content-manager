@@ -36,6 +36,35 @@ body {
   color: var(--uitk-text-primary-foreground);
 }
 
+.tabs-view {
+  height: 100%;
+}
+
 .language-formField {
   --uitkFormField-width: 160px;
+}
+
+.advanced-view {
+  flex-grow: 1;
+  min-height: 0;
+
+  height: 100%;
+  margin-block: var(--uitk-size-unit);
+  margin-inline: calc(var(--uitk-size-unit) * 1);
+}
+
+.filterListInput {
+  --uitkInput-background: var(--uitk-editable-background-high);
+}
+
+.text-source-list,
+.text-source-placeholder {
+  flex-grow: 1;
+  min-height: 0px;
+}
+
+.text-source-placeholder {
+  border-color: var(--uitk-container-borderColor-medium);
+  border-style: var(--uitk-container-borderStyle);
+  border-width: var(--uitk-container-borderWidth);
 }

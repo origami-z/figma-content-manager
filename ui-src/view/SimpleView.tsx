@@ -13,7 +13,7 @@ import {
 } from "../../shared-src";
 import { downloadDataUri } from "../components/utils";
 
-export const MainView = () => {
+export const SimpleView = () => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvLangs, setCsvLangs] = useState<string[]>([]);
   const [selectedLang, setSelectedLang] = useState<string>(DEFAULT_LANG);
