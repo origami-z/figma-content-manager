@@ -1,12 +1,11 @@
 import {
   Button,
-  FlexItem,
   FlexLayout,
   Input,
   StackLayout,
 } from "@jpmorganchase/uitk-core";
 import { RefreshIcon } from "@jpmorganchase/uitk-icons";
-import { LabelCaption, List, ListItem } from "@jpmorganchase/uitk-lab";
+import { LabelCaption, List } from "@jpmorganchase/uitk-lab";
 import React, { useState } from "react";
 
 export const AdvancedView = () => {
