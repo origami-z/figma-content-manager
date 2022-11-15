@@ -1386,48 +1386,33 @@
     "@types/yargs" "^17.0.8"
     chalk "^4.0.0"
 
-"@jpmorganchase/uitk-core@0.7.0":
-  version "0.7.0"
-  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-core/-/uitk-core-0.7.0.tgz#dd71c80d184b62431a95b2545becaa0e21a7b82e"
-  integrity sha512-5zZuwknS84aMrvi/PN1zc+nIUC57IjXVablTeOiPuNtucg8d2awgZf7yaPz0LwvfysIYz5b6lqlVx+Tb6YsjZg==
+"@jpmorganchase/uitk-core@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-core/-/uitk-core-0.8.0.tgz#d20c3fdde46977ed3bc288d7422d6f41eb42d49e"
+  integrity sha512-3MyBlxXYpWfjhauNs/rDWsIgaPgEx0tp0jBx5zYfZaIgdG8KPeMkCbmlQllHSV8IaYeQCi9HgZ6PyiqZ67yN6g==
   dependencies:
     "@floating-ui/react-dom-interactions" "^0.5.0"
-    "@jpmorganchase/uitk-icons" "0.4.1"
+    "@jpmorganchase/uitk-icons" "0.7.0"
     aria-hidden "^1.1.1"
     classnames "^2.2.6"
     no-scroll "^2.1.1"
-    warning "^4.0.3"
 
-"@jpmorganchase/uitk-icons@0.4.1":
-  version "0.4.1"
-  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-icons/-/uitk-icons-0.4.1.tgz#e1f42f737e6da64f236cb530d6d3ae515d1cbf30"
-  integrity sha512-eqgl/UDFKwSM/3JYequV0FjxqLO3ra5ahfxEL4g/Doju8IFRj0/D5dUhsE7UG5TiMp6qg3CLvQrH82OO6tpOQA==
+"@jpmorganchase/uitk-icons@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-icons/-/uitk-icons-0.7.0.tgz#9e327ffaea279b47c4894363e763939bd27a9d13"
+  integrity sha512-bzSgxswKyfuvp4BRZy9AZNZDcJmnE93AKS6igsRBInIGvgmXdtrf17VL+2a6UIrGabcNBBvnV25ilrhZWDFlBg==
   dependencies:
     classnames "^2.2.6"
 
-"@jpmorganchase/uitk-icons@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-icons/-/uitk-icons-0.5.0.tgz#a11e028b24d920c01ab057c5e4a1e457768b0fe9"
-  integrity sha512-pEvtcRhSJjZyXHHncZuVlNn8Ik/D0bPRq0MvGtkJXxvQ0Zhx6PsBHhJdyxqeKNIEwv69Q8LpOiIR7voxaanyLw==
-  dependencies:
-    classnames "^2.2.6"
-
-"@jpmorganchase/uitk-icons@0.6.0":
-  version "0.6.0"
-  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-icons/-/uitk-icons-0.6.0.tgz#4d6920f8ecbe1588eb68367954f933e0f2317996"
-  integrity sha512-geyzN7wHmgCVT7FWHdeid5duLPW8s9ZO9Vt+cDi1LAqF8LiXf6NWHirba9jnOjBKLVObUPnARtDTSGTgtG7Jkg==
-  dependencies:
-    classnames "^2.2.6"
-
-"@jpmorganchase/uitk-lab@0.7.1":
-  version "0.7.1"
-  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-lab/-/uitk-lab-0.7.1.tgz#6e69ecce84a2b1862e5dd0267cf74264d3d082c7"
-  integrity sha512-UbKDQvx4fkrZEC3yCCKObR5PJxNOIHwCFPXRjvOHgaeuB4l1lwyrPN6ol9QPgx/LhR8t9Fv4MW6s3Uaj1QF79w==
+"@jpmorganchase/uitk-lab@0.8.0":
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-lab/-/uitk-lab-0.8.0.tgz#18bfcbb1477d8790c14617905c686dbbab90a01a"
+  integrity sha512-T2ObJiUlnMuoExPMh78tGLo3qS/DVQWy6P7xpWWFlZDFxAal/FJ0ZXaudBa12NgFAuNouqGNV5zxPnmpNEwpzg==
   dependencies:
     "@floating-ui/react-dom-interactions" "^0.5.0"
     "@internationalized/date" "^3.0.0"
-    "@jpmorganchase/uitk-core" "0.7.0"
-    "@jpmorganchase/uitk-icons" "0.5.0"
+    "@jpmorganchase/uitk-core" "0.8.0"
+    "@jpmorganchase/uitk-icons" "0.7.0"
     attr-accept "^2.0.0"
     classnames "^2.2.6"
     clipboard-copy "^4.0.1"
@@ -1437,12 +1422,11 @@
     react-window "^1.8.6"
     rifm "^0.12.0"
     tinycolor2 "^1.4.2"
-    warning "^4.0.3"
 
-"@jpmorganchase/uitk-theme@0.5.0":
-  version "0.5.0"
-  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-theme/-/uitk-theme-0.5.0.tgz#117e4a02449fbdf83c2ef73db11d8b9594fe5c02"
-  integrity sha512-igBDycZw7vDpB7U7ShbeWpIaILr/YIMi8/XlgY/jTceW43n3pMdPRXDpc1waM9BtflHBfuQRla8XEQOxNiCriw==
+"@jpmorganchase/uitk-theme@0.6.0":
+  version "0.6.0"
+  resolved "https://registry.yarnpkg.com/@jpmorganchase/uitk-theme/-/uitk-theme-0.6.0.tgz#5a67019716e2087c5f954bfbb37f591882ec24d7"
+  integrity sha512-ua7F5SmKKwZGBH7kwqRvpilh0DoEVwV7nz+PbbuFetNgC0WDdXJeahlmuGPi8WskDGTRAEzoqU4SN04+2CGusg==
 
 "@jridgewell/gen-mapping@^0.1.0":
   version "0.1.1"
@@ -3875,7 +3859,7 @@ lodash@^4.0.1, lodash@^4.17.15, lodash@^4.17.21:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
+loose-envify@^1.1.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -4977,13 +4961,6 @@ walker@^1.0.8:
   integrity sha512-ts/8E8l5b7kY0vlWLewOkDXMmPdLcVV4GmOQLyxuSswIJsweeFZtAsMF7k1Nszz+TYBQrlYRmzOnr398y1JemQ==
   dependencies:
     makeerror "1.0.12"
-
-warning@^4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/warning/-/warning-4.0.3.tgz#16e9e077eb8a86d6af7d64aa1e05fd85b4678ca3"
-  integrity sha512-rpJyN222KWIvHJ/F53XSZv0Zl/accqHR8et1kpaMTD/fLCRxtV8iX8czMzY7sVZupTI3zcUTg8eycS2kNF9l6w==
-  dependencies:
-    loose-envify "^1.0.0"
 
 webidl-conversions@^7.0.0:
   version "7.0.0"

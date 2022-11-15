@@ -21,7 +21,7 @@ function App() {
   }, []);
 
   return (
-    <ToolkitProvider theme={theme}>
+    <ToolkitProvider mode={theme}>
       <MainView />
     </ToolkitProvider>
   );
