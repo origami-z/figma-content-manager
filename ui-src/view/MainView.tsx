@@ -1,7 +1,4 @@
-import {
-  Button,
-  StackLayout,
-} from "@salt-ds/core";
+import { Button, StackLayout } from "@salt-ds/core";
 import { Dropdown, FileDropZone, Checkbox, FormField } from "@salt-ds/lab";
 import React, { useCallback, useEffect, useState } from "react";
 import {
