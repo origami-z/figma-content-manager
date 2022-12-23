@@ -1,4 +1,4 @@
-import { ToolkitProvider } from "@jpmorganchase/uitk-core";
+import { SaltProvider } from "@salt-ds/core";
 import React, { useEffect } from "react";
 import { PostToFigmaMessage } from "../shared-src";
 import { useFigmaPluginTheme } from "./components/useFigmaPluginTheme";
@@ -21,9 +21,9 @@ function App() {
   }, []);
 
   return (
-    <ToolkitProvider mode={theme}>
+    <SaltProvider mode={theme}>
       <MainView />
-    </ToolkitProvider>
+    </SaltProvider>
   );
 }
 

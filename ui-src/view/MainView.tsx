@@ -1,10 +1,8 @@
 import {
   Button,
-  Checkbox,
-  FormField,
   StackLayout,
-} from "@jpmorganchase/uitk-core";
-import { Dropdown, FileDropZone } from "@jpmorganchase/uitk-lab";
+} from "@salt-ds/core";
+import { Dropdown, FileDropZone, Checkbox, FormField } from "@salt-ds/lab";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   DEFAULT_LANG,
