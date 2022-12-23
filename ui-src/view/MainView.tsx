@@ -122,7 +122,8 @@ export const MainView = () => {
       {revisionsAvailable && (
         <FormField
           label="Version"
-          className="uitkEmphasisHigh language-formField"
+          variant="secondary"
+          className="language-formField"
           fullWidth={false}
         >
           <Dropdown
