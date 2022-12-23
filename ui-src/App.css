@@ -18,24 +18,12 @@ body {
   color-scheme: dark;
 }
 
-.uitk-density-touch.uitk-density-touch,
-.uitk-density-low.uitk-density-low,
-.uitk-density-medium.uitk-density-medium,
-.uitk-density-high.uitk-density-high {
-  /* This shouldn't be defined 4 times */
-  --uitk-typography-fontFamily: "Open Sans";
-}
-
 .appRoot.appRoot {
-  background: var(--uitk-container-background-medium);
+  background: var(--salt-container-primary-background);
   /* Vertical align */
   justify-content: center;
 }
 
-.uitk-dark .appRoot {
-  color: var(--uitk-text-primary-foreground);
-}
-
 .language-formField {
-  --uitkFormField-width: 160px;
+  --saltFormField-width: 160px;
 }
