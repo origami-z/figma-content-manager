@@ -6,8 +6,6 @@ Within CSV, edit "characters" column to update original text, or add additional 
 
 Text revisions are stored in Figma document `figma.root` object via [`setSharedPluginData`](https://www.figma.com/plugin-docs/api/properties/nodes-setsharedplugindata/) API so any other user can see the revisions without additional file or system. This is currently only enabled via [Relaunch button](https://www.figma.com/plugin-docs/manifest/#relaunchbuttons) on text nodes having multiple revisions of text.
 
-
-
 ### To Develop
 
 - `yarn install`
