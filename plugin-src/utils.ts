@@ -1,6 +1,10 @@
-export const PLUGIN_DATA_SHARED_NAMESPACE = "CONTENT_COPY";
-export const PLUGIN_DATA_KEY_PERSISTED_DATA = "PERSISTED_DATA";
-export const PLUGIN_RELAUNCH_KEY_REVIEW_REVISION = "review-revision";
+import { PostToUIMessage, TextNodeInfo } from "../shared-src";
+import {
+  PLUGIN_DATA_KEY_PERSISTED_DATA,
+  PLUGIN_DATA_SHARED_NAMESPACE,
+  PLUGIN_RELAUNCH_KEY_REVIEW_REVISION,
+} from "./pluginDataUtils";
+import { textNodeInfoProcessor } from "./processors/textNodeInfoProcessor";
 
 export type HeadingSettings = {
   h1: number;
@@ -84,20 +88,35 @@ export const setRelaunchButton = (node: SceneNode) => {
   node.setRelaunchData({ [PLUGIN_RELAUNCH_KEY_REVIEW_REVISION]: "" });
 };
 
-export const persistInFigma = (data: string) => {
-  console.log("persistInFigma", data);
-  figma.root.setSharedPluginData(
-    PLUGIN_DATA_SHARED_NAMESPACE,
-    PLUGIN_DATA_KEY_PERSISTED_DATA,
-    data
-  );
-};
+export async function scanTextNodesInfo() {
+  if (figma.currentPage.selection.length === 0) {
+    figma.notify(`Please select something for scanning`);
+    return [];
+  }
 
-export const readPersistedData = () => {
-  const persistedData = figma.root.getSharedPluginData(
-    PLUGIN_DATA_SHARED_NAMESPACE,
-    PLUGIN_DATA_KEY_PERSISTED_DATA
-  );
-  console.log("readPersistedData", persistedData);
-  return persistedData;
-};
+  const textNodesInfo: TextNodeInfo[] = [];
+
+  for (const selectedNode of figma.currentPage.selection) {
+    const info = await textNodeInfoProcessor(selectedNode, {});
+    textNodesInfo.push(...info);
+  }
+
+  return textNodesInfo;
+}
+
+export function sendTextNodesInfoToUI(nodesInfo: TextNodeInfo[]) {
+  figma.ui.postMessage({
+    type: "scan-text-node-info-result",
+    textNodesInfo: nodesInfo,
+  } as PostToUIMessage);
+}
+
+export function focusNode(id: string) {
+  const nodeToFocus = figma.root.findOne((x) => x.id === id);
+  if (nodeToFocus !== null) {
+    // TODO: Switch current page first
+    figma.currentPage.selection = [nodeToFocus as any];
+  } else {
+    figma.notify(`Cannot find node with id "${id}"`, { error: true });
+  }
+}

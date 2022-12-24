@@ -1,0 +1,10 @@
+.advanced-view {
+  padding: var(--salt-size-unit);
+}
+
+.advanced-view table,
+.advanced-view th,
+.advanced-view td {
+  border: 1px solid var(--salt-separable-tertiary-borderColor);
+  border-collapse: collapse;
+}

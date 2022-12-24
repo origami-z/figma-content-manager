@@ -8,6 +8,12 @@ import {
   PostToUIMessage,
 } from "../shared-src/messages";
 import {
+  persistInFigma,
+  PLUGIN_RELAUNCH_KEY_REVIEW_REVISION,
+  readPersistedData,
+  updateNodeKey,
+} from "./pluginDataUtils";
+import {
   csvNodeProcessor,
   csvNodeUpdater,
   csvResultTransformer,
@@ -16,9 +22,9 @@ import {
 } from "./processors/csvProcessor";
 import {
   DEFAULT_HEADING_SETTINGS,
-  persistInFigma,
-  PLUGIN_RELAUNCH_KEY_REVIEW_REVISION,
-  readPersistedData,
+  focusNode,
+  scanTextNodesInfo,
+  sendTextNodesInfoToUI,
   sortNodeByPosition,
 } from "./utils";
 
@@ -36,6 +42,14 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
     if (msg.persistInFigma) {
       persistDataInFigma();
     }
+  } else if (msg.type === "focus-node") {
+    focusNode(msg.id);
+  } else if (msg.type === "scan-text-node-info") {
+    const nodesInfo = await scanTextNodesInfo();
+    // console.log({ nodesInfo });
+    sendTextNodesInfoToUI(nodesInfo);
+  } else if (msg.type === "update-node-key") {
+    updateNodeKey(msg.nodeId, msg.key);
   }
 };
 
