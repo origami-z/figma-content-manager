@@ -34,6 +34,20 @@ export const AdvancedView = () => {
             setTextNodesInfo(textNodesInfo);
             break;
           }
+          case "partial-update-text-node-info-result": {
+            const { partialTextNodesInfo: updatedInfo } = pluginMessage;
+            setTextNodesInfo((prev) =>
+              prev.map((info) => {
+                const matchedInfo = updatedInfo.find((x) => x.id === info.id);
+                if (matchedInfo) {
+                  return { ...info, ...matchedInfo };
+                } else {
+                  return info;
+                }
+              })
+            );
+            break;
+          }
           default:
         }
       }
@@ -58,6 +72,11 @@ export const AdvancedView = () => {
       "*"
     );
   };
+
+  // Auto scan on UI load
+  useEffect(() => {
+    onScanClick();
+  }, []);
 
   const onFocusTextNode = (id: string) => {
     parent.postMessage(
@@ -94,7 +113,7 @@ export const AdvancedView = () => {
         <thead>
           <tr>
             <th>
-              <Checkbox />
+              <Checkbox className="tableCheckbox" />
             </th>
             <th>Key</th>
             <th>Characters</th>
@@ -107,7 +126,7 @@ export const AdvancedView = () => {
             return (
               <tr>
                 <th>
-                  <Checkbox />
+                  <Checkbox className="tableCheckbox" />
                 </th>
                 <td>
                   <NodeKeyInput

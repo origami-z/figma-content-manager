@@ -25,6 +25,7 @@ export const writeNodeKey = (node: TextNode, key: string) => {
 };
 
 export const updateNodeKey = (id: string, key: string) => {
+  //   console.log("updateNodeKey", { id, key });
   const nodeToFind = figma.root.findOne((x) => x.id === id);
   if (nodeToFind) {
     writeNodeKey(nodeToFind as any, key);

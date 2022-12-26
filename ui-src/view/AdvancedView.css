@@ -8,3 +8,8 @@
   border: 1px solid var(--salt-separable-tertiary-borderColor);
   border-collapse: collapse;
 }
+
+.advanced-view .tableCheckbox.saltCheckbox {
+  --checkbox-label-marginTop: 0;
+  width: 14px;
+}

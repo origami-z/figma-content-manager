@@ -65,10 +65,16 @@ export type ScanTextNodeInfoResultToUIMessage = {
   textNodesInfo: TextNodeInfo[];
 };
 
+export type PartialUpdateTextNodeInfoResultToUIMessage = {
+  type: "partial-update-text-node-info-result";
+  partialTextNodesInfo: Partial<TextNodeInfo>[];
+};
+
 export type PostToUIMessage =
   | FileGeneratedToUIMessage
   | AvailableLangFromCsvToUIMessage
-  | ScanTextNodeInfoResultToUIMessage;
+  | ScanTextNodeInfoResultToUIMessage
+  | PartialUpdateTextNodeInfoResultToUIMessage;
 
 // This is useful to run some code when react is finished to get new information from Figma
 export type UiFinishLoadingToFigmaMessage = {

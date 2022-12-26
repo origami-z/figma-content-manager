@@ -11,10 +11,11 @@ export const NodeKeyInput = ({
   nodeInfo: TextNodeInfo;
   onUpdateNodeKey: (id: string, key: string) => void;
 }) => {
-  // TODO: update key when blur out of the input or hit "Enter" key
+  console.log("NodeKeyInput nodeInfo", nodeInfo);
   return (
     <Input
-      value={nodeInfo.key || nodeInfo.name}
+      defaultValue={nodeInfo.key}
+      inputProps={{ placeholder: nodeInfo.name }}
       endAdornment={
         nodeInfo.key ? (
           <Button onClick={() => onUpdateNodeKey(nodeInfo.id, "")}>
@@ -24,6 +25,10 @@ export const NodeKeyInput = ({
           <WarningIcon />
         )
       }
+      onBlur={(e) => {
+        const updatedValue = e.currentTarget.value;
+        onUpdateNodeKey(nodeInfo.id, updatedValue);
+      }}
     />
   );
 };

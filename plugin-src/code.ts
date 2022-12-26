@@ -50,6 +50,10 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
     sendTextNodesInfoToUI(nodesInfo);
   } else if (msg.type === "update-node-key") {
     updateNodeKey(msg.nodeId, msg.key);
+    figma.ui.postMessage({
+      type: "partial-update-text-node-info-result",
+      partialTextNodesInfo: [{ id: msg.nodeId, key: msg.key }],
+    } as PostToUIMessage);
   }
 };
 
