@@ -1,5 +1,12 @@
 .advanced-view {
   padding: var(--salt-size-unit);
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.advanced-view .tableWrapper {
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .advanced-view table,

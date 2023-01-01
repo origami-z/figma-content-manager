@@ -14,6 +14,8 @@ export const NodeKeyInput = ({
   console.log("NodeKeyInput nodeInfo", nodeInfo);
   return (
     <Input
+      // Use `key` to force rerender a new Input when nodeInfo key changes
+      key={`input-${nodeInfo.key}`}
       defaultValue={nodeInfo.key}
       inputProps={{ placeholder: nodeInfo.name }}
       endAdornment={
