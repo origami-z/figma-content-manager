@@ -5,16 +5,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import {
   PostToFigmaMessage,
   PostToUIMessage,
+  SelectableTextNodeInfo,
   TextNodeInfo,
 } from "../../shared-src";
+import {
+  convertToCsvDataUri,
+  convertToJsonDataUri,
+} from "../../shared-src/export-utils";
 import { NodeKeyInput } from "../components/NodeKeyInput";
-import { unparse, parse } from "papaparse";
+import { downloadDataUri } from "../components/utils";
 
 import "./AdvancedView.css";
-
-type SelectableTextNodeInfo = TextNodeInfo & {
-  checked: boolean;
-};
 
 const EXPORT_FORMATS = ["CSV", "JSON"] as const;
 
@@ -76,11 +77,12 @@ export const AdvancedView = () => {
     };
   }, [handleWindowMessage]);
 
-  const onScanClick = () => {
+  const scanTextNodeInfo = (autoTrigger: boolean) => {
     parent.postMessage(
       {
         pluginMessage: {
           type: "scan-text-node-info",
+          autoTrigger,
         } as PostToFigmaMessage,
       },
       "*"
@@ -89,8 +91,10 @@ export const AdvancedView = () => {
 
   // Auto scan on UI load
   useEffect(() => {
-    onScanClick();
+    scanTextNodeInfo(true);
   }, []);
+
+  const onScanClick = () => scanTextNodeInfo(false);
 
   const onFocusTextNode = (id: string) => {
     parent.postMessage(
@@ -135,6 +139,13 @@ export const AdvancedView = () => {
     const exportContent = textNodesInfo
       .filter((x) => x.checked)
       .map((node) => ({ key: node.key, characters: node.characters }));
+    if (selectedExportFormat === "CSV") {
+      downloadDataUri(convertToCsvDataUri(exportContent), "Figma Export.csv");
+    } else if (selectedExportFormat === "JSON") {
+      downloadDataUri(convertToJsonDataUri(exportContent), "Figma Export.json");
+    } else {
+      throw new Error("Unsupported export format: " + selectedExportFormat);
+    }
   };
 
   return (
@@ -202,7 +213,10 @@ export const AdvancedView = () => {
             }
             width={72}
           />
-          <Button disabled={exportButtonDisabled}>
+          <Button
+            disabled={exportButtonDisabled}
+            onClick={onExportButtonClicked}
+          >
             Export <ExportIcon />
           </Button>
         </FlexItem>

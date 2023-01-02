@@ -19,6 +19,7 @@ import {
   UpdaterSettings,
 } from "./iterate";
 import { unparse, parse } from "papaparse";
+import { convertToCsvDataUri } from "../../shared-src/export-utils";
 
 const getListOption = (node: TextNode): string => {
   const fullListOption = node.getRangeListOptions(0, node.characters.length);
@@ -105,8 +106,7 @@ export const csvResultTransformer = async (
 ): Promise<string> => {
   const rows = resultsPerNode.flatMap((x) => x.results);
   console.log("csvResultTransformer rows", rows);
-  const rowsString = unparse(rows, { header: true });
-  return "data:text/csv;charset=utf-8," + encodeURIComponent(rowsString);
+  return convertToCsvDataUri(rows);
 };
 
 export const parseCsvString = <T extends CsvNodeInfo>(input: string) => {

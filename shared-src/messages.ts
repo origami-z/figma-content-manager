@@ -60,6 +60,10 @@ export type TextNodeInfo = {
   characters: string;
 };
 
+export type SelectableTextNodeInfo = TextNodeInfo & {
+  checked: boolean;
+};
+
 export type ScanTextNodeInfoResultToUIMessage = {
   type: "scan-text-node-info-result";
   textNodesInfo: TextNodeInfo[];
@@ -98,6 +102,7 @@ export type UpdateContentWithLangToFigmaMessage = {
 
 export type ScanTextNodeInfoToFigmaMessage = {
   type: "scan-text-node-info";
+  autoTrigger: boolean;
 };
 
 export type FocusNodeToFigmaMessage = {

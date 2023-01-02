@@ -88,9 +88,11 @@ export const setRelaunchButton = (node: SceneNode) => {
   node.setRelaunchData({ [PLUGIN_RELAUNCH_KEY_REVIEW_REVISION]: "" });
 };
 
-export async function scanTextNodesInfo() {
+export async function scanTextNodesInfo(autoTrigger: boolean) {
   if (figma.currentPage.selection.length === 0) {
-    figma.notify(`Please select something for scanning`);
+    if (!autoTrigger) {
+      figma.notify(`Please select something for scanning`);
+    }
     return [];
   }
 

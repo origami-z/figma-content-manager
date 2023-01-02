@@ -45,7 +45,7 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
   } else if (msg.type === "focus-node") {
     focusNode(msg.id);
   } else if (msg.type === "scan-text-node-info") {
-    const nodesInfo = await scanTextNodesInfo();
+    const nodesInfo = await scanTextNodesInfo(msg.autoTrigger);
     // console.log({ nodesInfo });
     sendTextNodesInfoToUI(nodesInfo);
   } else if (msg.type === "update-node-key") {
