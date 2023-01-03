@@ -40,7 +40,7 @@ export const TabsView = () => {
           className="tab"
         >
           <Tab label="Basic" />
-          <Tab label="Advanced" />
+          <Tab label="Key Editable" />
         </Tabstrip>
       </FlexItem>
       {renderView()}
