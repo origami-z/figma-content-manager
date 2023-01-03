@@ -8,7 +8,9 @@ import {
 } from "../../shared-src";
 import { downloadDataUri } from "../components/utils";
 
-export const MainView = () => {
+import "./SimpleView.css";
+
+export const SimpleView = () => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [csvLangs, setCsvLangs] = useState<string[]>([]);
   const [selectedLang, setSelectedLang] = useState<string>(DEFAULT_LANG);
@@ -101,7 +103,7 @@ export const MainView = () => {
   const revisionsAvailable = csvLangs.length > 0;
 
   return (
-    <StackLayout className="appRoot" align="center">
+    <StackLayout className="simple-view" align="center">
       <Button onClick={onExportCsv}>Export CSV</Button>
       {csvFile === null ? (
         <FileDropZone

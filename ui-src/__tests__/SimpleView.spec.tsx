@@ -1,12 +1,12 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import userEvents from "@testing-library/user-event";
 import React from "react";
-import { MainView } from "../view/MainView";
+import { SimpleView } from "../view/SimpleView";
 
-describe("MainView", () => {
+describe("SimpleView", () => {
   beforeEach(() => {
     window.parent.postMessage = jest.fn();
-    render(<MainView />);
+    render(<SimpleView />);
   });
   test("renders export button", () => {
     expect(screen.getByText("Export CSV")).toBeInTheDocument();

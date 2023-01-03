@@ -2,7 +2,7 @@ import { SaltProvider } from "@salt-ds/core";
 import React, { useEffect } from "react";
 import { PostToFigmaMessage } from "../shared-src";
 import { useFigmaPluginTheme } from "./components/useFigmaPluginTheme";
-import { MainView } from "./view/MainView";
+import { TabsView } from "./view/TabsView";
 
 import "./App.css";
 
@@ -22,7 +22,7 @@ function App() {
 
   return (
     <SaltProvider mode={theme}>
-      <MainView />
+      <TabsView />
     </SaltProvider>
   );
 }

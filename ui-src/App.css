@@ -20,8 +20,6 @@ body {
 
 .appRoot.appRoot {
   background: var(--salt-container-primary-background);
-  /* Vertical align */
-  justify-content: center;
 }
 
 .language-formField {

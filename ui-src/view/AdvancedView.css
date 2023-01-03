@@ -1,0 +1,22 @@
+.advanced-view {
+  padding: var(--salt-size-unit);
+  flex-grow: 1;
+  min-height: 0;
+}
+
+.advanced-view .tableWrapper {
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.advanced-view table,
+.advanced-view th,
+.advanced-view td {
+  border: 1px solid var(--salt-separable-tertiary-borderColor);
+  border-collapse: collapse;
+}
+
+.advanced-view .tableCheckbox.saltCheckbox {
+  --checkbox-label-marginTop: 0;
+  width: 14px;
+}
