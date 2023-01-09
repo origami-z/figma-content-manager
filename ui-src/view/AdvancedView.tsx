@@ -27,9 +27,8 @@ export const AdvancedView = () => {
     // },
   ]);
 
-  const [selectedExportFormat, setSelectedExportFormat] = useState<
-    typeof EXPORT_FORMATS[number]
-  >(EXPORT_FORMATS[0]);
+  const [selectedExportFormat, setSelectedExportFormat] =
+    useState<typeof EXPORT_FORMATS[number]>("JSON");
 
   const handleWindowMessage = useCallback(
     (event: {
