@@ -50,7 +50,7 @@ export type AvailableLangFromCsvToUIMessage = {
   langs: string[];
 };
 
-export type TextNodeInfo = {
+type TextNodeInfo = {
   /** Figma Node ID */
   id: string;
   /** User defined node key */
@@ -66,12 +66,12 @@ export type SelectableTextNodeInfo = TextNodeInfo & {
 
 export type ScanTextNodeInfoResultToUIMessage = {
   type: "scan-text-node-info-result";
-  textNodesInfo: TextNodeInfo[];
+  textNodesInfo: SelectableTextNodeInfo[];
 };
 
 export type PartialUpdateTextNodeInfoResultToUIMessage = {
   type: "partial-update-text-node-info-result";
-  partialTextNodesInfo: Partial<TextNodeInfo>[];
+  partialTextNodesInfo: Partial<SelectableTextNodeInfo>[];
 };
 
 export type PostToUIMessage =
@@ -116,6 +116,12 @@ export type UpdateNodeKeyToFigmaMessage = {
   key: string;
 };
 
+export type UpdateNodeCheckedToFigmaMessage = {
+  type: "update-node-selected";
+  nodeId: string;
+  checked: boolean;
+};
+
 export type PostToFigmaMessage =
   | UiFinishLoadingToFigmaMessage
   | ExportCsvFileToFigmaMessage
@@ -123,4 +129,5 @@ export type PostToFigmaMessage =
   | UpdateContentWithLangToFigmaMessage
   | ScanTextNodeInfoToFigmaMessage
   | FocusNodeToFigmaMessage
-  | UpdateNodeKeyToFigmaMessage;
+  | UpdateNodeKeyToFigmaMessage
+  | UpdateNodeCheckedToFigmaMessage;

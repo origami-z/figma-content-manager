@@ -12,6 +12,7 @@ import {
   PLUGIN_RELAUNCH_KEY_REVIEW_REVISION,
   readPersistedData,
   updateNodeKey,
+  updateNodeSelected,
 } from "./pluginDataUtils";
 import {
   csvNodeProcessor,
@@ -53,6 +54,12 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
     figma.ui.postMessage({
       type: "partial-update-text-node-info-result",
       partialTextNodesInfo: [{ id: msg.nodeId, key: msg.key }],
+    } as PostToUIMessage);
+  } else if (msg.type === "update-node-selected") {
+    updateNodeSelected(msg.nodeId, msg.checked);
+    figma.ui.postMessage({
+      type: "partial-update-text-node-info-result",
+      partialTextNodesInfo: [{ id: msg.nodeId, checked: msg.checked }],
     } as PostToUIMessage);
   }
 };

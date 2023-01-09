@@ -1,4 +1,4 @@
-import { PostToUIMessage, TextNodeInfo } from "../shared-src";
+import { PostToUIMessage, SelectableTextNodeInfo } from "../shared-src";
 import {
   PLUGIN_DATA_KEY_PERSISTED_DATA,
   PLUGIN_DATA_SHARED_NAMESPACE,
@@ -96,7 +96,7 @@ export async function scanTextNodesInfo(autoTrigger: boolean) {
     return [];
   }
 
-  const textNodesInfo: TextNodeInfo[] = [];
+  const textNodesInfo: SelectableTextNodeInfo[] = [];
 
   for (const selectedNode of figma.currentPage.selection) {
     const info = await textNodeInfoProcessor(selectedNode, {});
@@ -106,7 +106,7 @@ export async function scanTextNodesInfo(autoTrigger: boolean) {
   return textNodesInfo;
 }
 
-export function sendTextNodesInfoToUI(nodesInfo: TextNodeInfo[]) {
+export function sendTextNodesInfoToUI(nodesInfo: SelectableTextNodeInfo[]) {
   figma.ui.postMessage({
     type: "scan-text-node-info-result",
     textNodesInfo: nodesInfo,

@@ -6,7 +6,6 @@ import {
   PostToFigmaMessage,
   PostToUIMessage,
   SelectableTextNodeInfo,
-  TextNodeInfo,
 } from "../../shared-src";
 import {
   convertToCsvDataUri,
@@ -44,9 +43,7 @@ export const AdvancedView = () => {
         switch (pluginMessage.type) {
           case "scan-text-node-info-result": {
             const { textNodesInfo } = pluginMessage;
-            setTextNodesInfo(
-              textNodesInfo.map((x) => ({ ...x, checked: true }))
-            );
+            setTextNodesInfo(textNodesInfo);
             break;
           }
           case "partial-update-text-node-info-result": {
@@ -121,13 +118,23 @@ export const AdvancedView = () => {
     );
   };
 
-  const onUpdateRowChecked = (rowIndex: number, checked: boolean) => {
-    setTextNodesInfo((infos) => {
-      const newInfos = [...infos];
-      const oldRow = newInfos[rowIndex];
-      newInfos[rowIndex] = { ...oldRow, checked };
-      return newInfos;
-    });
+  const onUpdateRowChecked = (id: string, checked: boolean) => {
+    // setTextNodesInfo((infos) => {
+    //   const newInfos = [...infos];
+    //   const oldRow = newInfos[rowIndex];
+    //   newInfos[rowIndex] = { ...oldRow, checked };
+    //   return newInfos;
+    // });
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "update-node-selected",
+          nodeId: id,
+          checked,
+        } as PostToFigmaMessage,
+      },
+      "*"
+    );
   };
 
   // Every checked row should have key filled in
@@ -174,7 +181,7 @@ export const AdvancedView = () => {
                     <Checkbox
                       className="tableCheckbox "
                       checked={nodeInfo.checked}
-                      onChange={(_, c) => onUpdateRowChecked(nodeInfoIndex, c)}
+                      onChange={(_, c) => onUpdateRowChecked(nodeInfo.id, c)}
                     />
                   </th>
                   <td>

@@ -1,24 +1,27 @@
-import { TextNodeInfo } from "../../shared-src";
-import { getNodeKey } from "../pluginDataUtils";
+import { SelectableTextNodeInfo } from "../../shared-src";
+import { getNodeKey, getSelected } from "../pluginDataUtils";
 import { sortNodeByPosition } from "../utils";
 import { iterate } from "./iterate";
 
 export const textNodeInfoTextNodeProcess = (
   node: TextNode,
   settings: any
-): TextNodeInfo[] => {
+): SelectableTextNodeInfo[] => {
   if (!node.visible || node.characters.length === 0) {
     return [];
   }
 
   const key = getNodeKey(node);
+  const selected = getSelected(node);
 
   const nodeInfo = {
     id: node.id,
     key,
     name: node.name,
     characters: node.characters,
+    checked: selected,
   };
+  console.log("TextNodeProcess", nodeInfo);
   return [nodeInfo];
 };
 
@@ -26,14 +29,15 @@ export const textNodeInfoChildrenNodeProcess = (
   node: SceneNode & ChildrenMixin,
   settings: any,
   processors: any
-): TextNodeInfo[] => {
+): SelectableTextNodeInfo[] => {
   return node.children
     .slice()
     .sort(sortNodeByPosition)
-    .reduce<TextNodeInfo[]>((prev, child) => {
+    .reduce<SelectableTextNodeInfo[]>((prev, child) => {
       return [
         ...prev,
-        ...(iterate<TextNodeInfo[]>(child, settings, processors) || []),
+        ...(iterate<SelectableTextNodeInfo[]>(child, settings, processors) ||
+          []),
       ];
     }, []);
 };
@@ -43,9 +47,9 @@ const emptyProcess = () => null;
 export const textNodeInfoProcessor = async (
   node: SceneNode,
   settings: any
-): Promise<TextNodeInfo[]> => {
+): Promise<SelectableTextNodeInfo[]> => {
   return (
-    iterate<TextNodeInfo[]>(node, settings, {
+    iterate<SelectableTextNodeInfo[]>(node, settings, {
       image: emptyProcess,
       text: textNodeInfoTextNodeProcess,
       children: textNodeInfoChildrenNodeProcess,
