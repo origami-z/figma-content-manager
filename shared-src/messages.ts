@@ -85,6 +85,12 @@ export type UiFinishLoadingToFigmaMessage = {
   type: "ui-finish-loading";
 };
 
+export type ResizeWindowToFigmaMessage = {
+  type: "resize-window";
+  width: number;
+  height: number;
+};
+
 export type ExportCsvFileToFigmaMessage = {
   type: "export-csv-file";
 };
@@ -124,6 +130,7 @@ export type UpdateNodeCheckedToFigmaMessage = {
 
 export type PostToFigmaMessage =
   | UiFinishLoadingToFigmaMessage
+  | ResizeWindowToFigmaMessage
   | ExportCsvFileToFigmaMessage
   | DetectAvailableLangFromCSVToFigmaMessage
   | UpdateContentWithLangToFigmaMessage

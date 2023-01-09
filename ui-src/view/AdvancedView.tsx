@@ -164,12 +164,12 @@ export const AdvancedView = () => {
         <table>
           <thead>
             <tr>
-              <th>
+              <th className="checkbox-col">
                 {/* <Checkbox className="tableCheckbox headerCheckbox" /> */}
               </th>
               <th>Key</th>
               <th>Characters</th>
-              <th>{/* Button column */}</th>
+              <th className="button-col">{/* Button column */}</th>
             </tr>
           </thead>
           <tbody>
@@ -177,9 +177,9 @@ export const AdvancedView = () => {
             {textNodesInfo.map((nodeInfo, nodeInfoIndex) => {
               return (
                 <tr key={`table-row-${nodeInfoIndex}`}>
-                  <th>
+                  <th className="checkbox-col">
                     <Checkbox
-                      className="tableCheckbox "
+                      className="tableCheckbox"
                       checked={nodeInfo.checked}
                       onChange={(_, c) => onUpdateRowChecked(nodeInfo.id, c)}
                     />
@@ -193,7 +193,7 @@ export const AdvancedView = () => {
                   <td>
                     <Input value={nodeInfo.characters} readOnly />
                   </td>
-                  <td>
+                  <td className="button-col">
                     <Button onClick={() => onFocusTextNode(nodeInfo.id)}>
                       <TargetIcon />
                     </Button>
