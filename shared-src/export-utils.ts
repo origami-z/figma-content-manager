@@ -5,8 +5,9 @@ export const convertToCsvDataUri = <T extends unknown[]>(data: T): string => {
   return "data:text/csv;charset=utf-8," + encodeURIComponent(rowsString);
 };
 
-export const convertToJsonDataUri = <T extends { [key: string]: string }[]>(
-  data: T
+export const convertToJsonDataUri = <T extends { [key: string]: string }>(
+  data: T[],
+  metaData: { [key: string]: string }
 ): string => {
   const contentConverted: { [key: string]: string } = {};
   for (const row of data) {
@@ -15,8 +16,7 @@ export const convertToJsonDataUri = <T extends { [key: string]: string }[]>(
     }
   }
   const exportJson = {
-    // More to come, e.g. region, language
-    dateExported: new Date().toISOString(),
+    ...metaData,
     content: contentConverted,
   };
   return (
