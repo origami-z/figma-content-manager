@@ -6,7 +6,6 @@ import {
   PostToFigmaMessage,
   PostToUIMessage,
   SelectableTextNodeInfo,
-  TextNodeInfo,
 } from "../../shared-src";
 import {
   convertToCsvDataUri,
@@ -28,9 +27,8 @@ export const AdvancedView = () => {
     // },
   ]);
 
-  const [selectedExportFormat, setSelectedExportFormat] = useState<
-    typeof EXPORT_FORMATS[number]
-  >(EXPORT_FORMATS[0]);
+  const [selectedExportFormat, setSelectedExportFormat] =
+    useState<typeof EXPORT_FORMATS[number]>("JSON");
 
   const handleWindowMessage = useCallback(
     (event: {
@@ -44,9 +42,7 @@ export const AdvancedView = () => {
         switch (pluginMessage.type) {
           case "scan-text-node-info-result": {
             const { textNodesInfo } = pluginMessage;
-            setTextNodesInfo(
-              textNodesInfo.map((x) => ({ ...x, checked: true }))
-            );
+            setTextNodesInfo(textNodesInfo);
             break;
           }
           case "partial-update-text-node-info-result": {
@@ -121,13 +117,23 @@ export const AdvancedView = () => {
     );
   };
 
-  const onUpdateRowChecked = (rowIndex: number, checked: boolean) => {
-    setTextNodesInfo((infos) => {
-      const newInfos = [...infos];
-      const oldRow = newInfos[rowIndex];
-      newInfos[rowIndex] = { ...oldRow, checked };
-      return newInfos;
-    });
+  const onUpdateRowChecked = (id: string, checked: boolean) => {
+    // setTextNodesInfo((infos) => {
+    //   const newInfos = [...infos];
+    //   const oldRow = newInfos[rowIndex];
+    //   newInfos[rowIndex] = { ...oldRow, checked };
+    //   return newInfos;
+    // });
+    parent.postMessage(
+      {
+        pluginMessage: {
+          type: "update-node-selected",
+          nodeId: id,
+          checked,
+        } as PostToFigmaMessage,
+      },
+      "*"
+    );
   };
 
   // Every checked row should have key filled in
@@ -157,12 +163,12 @@ export const AdvancedView = () => {
         <table>
           <thead>
             <tr>
-              <th>
+              <th className="checkbox-col">
                 {/* <Checkbox className="tableCheckbox headerCheckbox" /> */}
               </th>
               <th>Key</th>
               <th>Characters</th>
-              <th>{/* Button column */}</th>
+              <th className="button-col">{/* Button column */}</th>
             </tr>
           </thead>
           <tbody>
@@ -170,11 +176,11 @@ export const AdvancedView = () => {
             {textNodesInfo.map((nodeInfo, nodeInfoIndex) => {
               return (
                 <tr key={`table-row-${nodeInfoIndex}`}>
-                  <th>
+                  <th className="checkbox-col">
                     <Checkbox
-                      className="tableCheckbox "
+                      className="tableCheckbox"
                       checked={nodeInfo.checked}
-                      onChange={(_, c) => onUpdateRowChecked(nodeInfoIndex, c)}
+                      onChange={(_, c) => onUpdateRowChecked(nodeInfo.id, c)}
                     />
                   </th>
                   <td>
@@ -186,7 +192,7 @@ export const AdvancedView = () => {
                   <td>
                     <Input value={nodeInfo.characters} readOnly />
                   </td>
-                  <td>
+                  <td className="button-col">
                     <Button onClick={() => onFocusTextNode(nodeInfo.id)}>
                       <TargetIcon />
                     </Button>

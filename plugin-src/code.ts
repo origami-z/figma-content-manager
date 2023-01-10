@@ -12,6 +12,7 @@ import {
   PLUGIN_RELAUNCH_KEY_REVIEW_REVISION,
   readPersistedData,
   updateNodeKey,
+  updateNodeSelected,
 } from "./pluginDataUtils";
 import {
   csvNodeProcessor,
@@ -30,11 +31,17 @@ import {
 
 let parsedCsv: ParseResult<CsvNodeInfoWithLang> | null = null;
 
-figma.showUI(__html__, { themeColors: true, height: 340 });
+const MIN_WIDTH = 300;
+const MIN_HEIGHT = 340;
+
+figma.showUI(__html__, { themeColors: true, height: MIN_HEIGHT });
 
 figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
   if (msg.type === "export-csv-file") {
     await exportCsvFile();
+  } else if (msg.type === "resize-window") {
+    const { width, height } = msg;
+    figma.ui.resize(Math.max(width, MIN_WIDTH), Math.max(height, MIN_HEIGHT));
   } else if (msg.type === "detect-available-lang-from-csv") {
     await parseCsvAndDetectRevision(msg.csvString);
   } else if (msg.type === "update-content-with-lang") {
@@ -53,6 +60,12 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
     figma.ui.postMessage({
       type: "partial-update-text-node-info-result",
       partialTextNodesInfo: [{ id: msg.nodeId, key: msg.key }],
+    } as PostToUIMessage);
+  } else if (msg.type === "update-node-selected") {
+    updateNodeSelected(msg.nodeId, msg.checked);
+    figma.ui.postMessage({
+      type: "partial-update-text-node-info-result",
+      partialTextNodesInfo: [{ id: msg.nodeId, checked: msg.checked }],
     } as PostToUIMessage);
   }
 };

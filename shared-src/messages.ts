@@ -50,7 +50,7 @@ export type AvailableLangFromCsvToUIMessage = {
   langs: string[];
 };
 
-export type TextNodeInfo = {
+type TextNodeInfo = {
   /** Figma Node ID */
   id: string;
   /** User defined node key */
@@ -66,12 +66,12 @@ export type SelectableTextNodeInfo = TextNodeInfo & {
 
 export type ScanTextNodeInfoResultToUIMessage = {
   type: "scan-text-node-info-result";
-  textNodesInfo: TextNodeInfo[];
+  textNodesInfo: SelectableTextNodeInfo[];
 };
 
 export type PartialUpdateTextNodeInfoResultToUIMessage = {
   type: "partial-update-text-node-info-result";
-  partialTextNodesInfo: Partial<TextNodeInfo>[];
+  partialTextNodesInfo: Partial<SelectableTextNodeInfo>[];
 };
 
 export type PostToUIMessage =
@@ -83,6 +83,12 @@ export type PostToUIMessage =
 // This is useful to run some code when react is finished to get new information from Figma
 export type UiFinishLoadingToFigmaMessage = {
   type: "ui-finish-loading";
+};
+
+export type ResizeWindowToFigmaMessage = {
+  type: "resize-window";
+  width: number;
+  height: number;
 };
 
 export type ExportCsvFileToFigmaMessage = {
@@ -116,11 +122,19 @@ export type UpdateNodeKeyToFigmaMessage = {
   key: string;
 };
 
+export type UpdateNodeCheckedToFigmaMessage = {
+  type: "update-node-selected";
+  nodeId: string;
+  checked: boolean;
+};
+
 export type PostToFigmaMessage =
   | UiFinishLoadingToFigmaMessage
+  | ResizeWindowToFigmaMessage
   | ExportCsvFileToFigmaMessage
   | DetectAvailableLangFromCSVToFigmaMessage
   | UpdateContentWithLangToFigmaMessage
   | ScanTextNodeInfoToFigmaMessage
   | FocusNodeToFigmaMessage
-  | UpdateNodeKeyToFigmaMessage;
+  | UpdateNodeKeyToFigmaMessage
+  | UpdateNodeCheckedToFigmaMessage;

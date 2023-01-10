@@ -2,6 +2,7 @@ import { SaltProvider } from "@salt-ds/core";
 import React, { useEffect } from "react";
 import { PostToFigmaMessage } from "../shared-src";
 import { useFigmaPluginTheme } from "./components/useFigmaPluginTheme";
+import { CornerResizer } from "./components/CornerResizer";
 import { TabsView } from "./view/TabsView";
 
 import "./App.css";
@@ -23,6 +24,7 @@ function App() {
   return (
     <SaltProvider mode={theme}>
       <TabsView />
+      <CornerResizer />
     </SaltProvider>
   );
 }

@@ -16,7 +16,21 @@
   border-collapse: collapse;
 }
 
+.advanced-view table {
+  width: 100%;
+}
+
+.advanced-view th.checkbox-col,
+.advanced-view td.checkbox-col {
+  width: 18px;
+}
+
 .advanced-view .tableCheckbox.saltCheckbox {
   --checkbox-label-marginTop: 0;
   width: 14px;
+}
+
+.advanced-view th.button-col,
+.advanced-view td.button-col {
+  width: 31px;
 }
