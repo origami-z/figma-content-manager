@@ -110,7 +110,7 @@ export function sendTextNodesInfoToUI(nodesInfo: SelectableTextNodeInfo[]) {
   figma.ui.postMessage({
     type: "scan-text-node-info-result",
     textNodesInfo: nodesInfo,
-  } as PostToUIMessage);
+  } satisfies PostToUIMessage);
 }
 
 export function focusNode(id: string) {

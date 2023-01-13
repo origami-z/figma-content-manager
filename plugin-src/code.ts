@@ -64,13 +64,13 @@ figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
     figma.ui.postMessage({
       type: "partial-update-text-node-info-result",
       partialTextNodesInfo: [{ id: msg.nodeId, key: msg.key }],
-    } as PostToUIMessage);
+    } satisfies PostToUIMessage);
   } else if (msg.type === "update-node-selected") {
     updateNodeSelected(msg.nodeId, msg.checked);
     figma.ui.postMessage({
       type: "partial-update-text-node-info-result",
       partialTextNodesInfo: [{ id: msg.nodeId, checked: msg.checked }],
-    } as PostToUIMessage);
+    } satisfies PostToUIMessage);
   }
 };
 
@@ -111,7 +111,7 @@ function sendAvailableRevisionToUI() {
   figma.ui.postMessage({
     type: "available-lang-from-csv",
     langs: [DEFAULT_LANG, ...additionalLangs],
-  } as PostToUIMessage);
+  } satisfies PostToUIMessage);
 }
 
 async function updateWithLang(lang: string) {
@@ -257,7 +257,7 @@ async function exportCsvFile() {
           type: "file-generated",
           data: dataReturn,
           defaultFileName: figma.root.name + ".csv",
-        } as PostToUIMessage);
+        } satisfies PostToUIMessage);
 
         notificationHandle?.cancel();
         notificationHandle = figma.notify("Done", { timeout: 1000 });

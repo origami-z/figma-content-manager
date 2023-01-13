@@ -53,7 +53,7 @@ export const SimpleView = () => {
       {
         pluginMessage: {
           type: "export-csv-file",
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
@@ -66,7 +66,7 @@ export const SimpleView = () => {
           type: "update-content-with-lang",
           lang: selectedLang,
           persistInFigma: persistChecked,
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
@@ -86,7 +86,7 @@ export const SimpleView = () => {
             pluginMessage: {
               type: "detect-available-lang-from-csv",
               csvString: fileReadString,
-            } as PostToFigmaMessage,
+            } satisfies PostToFigmaMessage,
           },
           "*"
         );

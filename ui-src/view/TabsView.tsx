@@ -14,7 +14,7 @@ export const TabsView = () => {
     //     pluginMessage: {
     //       type: "ui-view-changed",
     //       view: index === 0 ? "select" : index === 1 ? "simple" : "advanced",
-    //     } as PostToFigmaMessage,
+    //     } satisfies PostToFigmaMessage,
     //   },
     //   "*"
     // );

@@ -15,7 +15,7 @@ function App() {
       {
         pluginMessage: {
           type: "ui-finish-loading",
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
