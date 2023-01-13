@@ -78,7 +78,7 @@ export const AdvancedView = () => {
         pluginMessage: {
           type: "scan-text-node-info",
           autoTrigger,
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
@@ -97,7 +97,7 @@ export const AdvancedView = () => {
         pluginMessage: {
           type: "focus-node",
           id,
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
@@ -110,7 +110,7 @@ export const AdvancedView = () => {
           type: "update-node-key",
           nodeId: id,
           key,
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
@@ -129,7 +129,7 @@ export const AdvancedView = () => {
           type: "update-node-selected",
           nodeId: id,
           checked,
-        } as PostToFigmaMessage,
+        } satisfies PostToFigmaMessage,
       },
       "*"
     );
