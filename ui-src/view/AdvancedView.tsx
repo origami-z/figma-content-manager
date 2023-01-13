@@ -1,6 +1,6 @@
 import { Button, FlexItem, FlexLayout, StackLayout } from "@salt-ds/core";
 import { ExportIcon, RefreshIcon, TargetIcon } from "@salt-ds/icons";
-import { Checkbox, Dropdown, Input } from "@salt-ds/lab";
+import { Checkbox, Dropdown, FormField, Input } from "@salt-ds/lab";
 import React, { useCallback, useEffect, useState } from "react";
 import {
   PostToFigmaMessage,
@@ -19,16 +19,15 @@ import "./AdvancedView.css";
 const EXPORT_FORMATS = ["CSV", "JSON"] as const;
 
 export const AdvancedView = () => {
-  const [textNodesInfo, setTextNodesInfo] = useState<SelectableTextNodeInfo[]>([
-    // {
-    //   id: "101:4",
-    //   key: "Heading",
-    //   characters: "Heading v2",
-    // },
-  ]);
+  const [textNodesInfo, setTextNodesInfo] = useState<SelectableTextNodeInfo[]>(
+    []
+  );
 
   const [selectedExportFormat, setSelectedExportFormat] =
     useState<typeof EXPORT_FORMATS[number]>("JSON");
+
+  const [region, setRegion] = useState("US");
+  const [language, setLanguage] = useState("en");
 
   const handleWindowMessage = useCallback(
     (event: {
@@ -136,10 +135,10 @@ export const AdvancedView = () => {
     );
   };
 
+  const checkedRows = textNodesInfo.filter((x) => x.checked);
   // Every checked row should have key filled in
-  const exportButtonDisabled = textNodesInfo
-    .filter((x) => x.checked)
-    .some((x) => !!!x.key);
+  const exportButtonDisabled =
+    checkedRows.length == 0 || checkedRows.some((x) => !!!x.key);
 
   const onExportButtonClicked = () => {
     const exportContent = textNodesInfo
@@ -148,7 +147,14 @@ export const AdvancedView = () => {
     if (selectedExportFormat === "CSV") {
       downloadDataUri(convertToCsvDataUri(exportContent), "Figma Export.csv");
     } else if (selectedExportFormat === "JSON") {
-      downloadDataUri(convertToJsonDataUri(exportContent), "Figma Export.json");
+      downloadDataUri(
+        convertToJsonDataUri(exportContent, {
+          region,
+          language,
+          dateExported: new Date().toISOString(),
+        }),
+        "Figma Export.json"
+      );
     } else {
       throw new Error("Unsupported export format: " + selectedExportFormat);
     }
@@ -203,29 +209,40 @@ export const AdvancedView = () => {
           </tbody>
         </table>
       </FlexItem>
-      <FlexLayout justify="space-between">
-        <FlexItem>
+      <FlexLayout justify="space-between" gap={1}>
+        <FlexItem align="end">
           <Button onClick={onScanClick}>
             <RefreshIcon />
           </Button>
         </FlexItem>
 
-        <FlexItem>
-          <Dropdown
-            source={EXPORT_FORMATS}
-            selected={selectedExportFormat}
-            onSelectionChange={(_, selected) =>
-              selected && setSelectedExportFormat(selected)
-            }
-            width={72}
-          />
+        <FlexLayout align="end" gap={1}>
+          <FormField label="Region" style={{ width: 52 }}>
+            <Input value={region} onChange={(_, value) => setRegion(value)} />
+          </FormField>
+          <FormField label="Lang" style={{ width: 48 }}>
+            <Input
+              value={language}
+              onChange={(_, value) => setLanguage(value)}
+            />
+          </FormField>
+          <FormField label="Format" style={{ width: 64 }}>
+            <Dropdown
+              source={EXPORT_FORMATS}
+              selected={selectedExportFormat}
+              onSelectionChange={(_, selected) =>
+                selected && setSelectedExportFormat(selected)
+              }
+              // width={64}
+            />
+          </FormField>
           <Button
             disabled={exportButtonDisabled}
             onClick={onExportButtonClicked}
           >
             Export <ExportIcon />
           </Button>
-        </FlexItem>
+        </FlexLayout>
       </FlexLayout>
     </StackLayout>
   );

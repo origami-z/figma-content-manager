@@ -31,10 +31,14 @@ import {
 
 let parsedCsv: ParseResult<CsvNodeInfoWithLang> | null = null;
 
-const MIN_WIDTH = 300;
+const MIN_WIDTH = 340;
 const MIN_HEIGHT = 340;
 
-figma.showUI(__html__, { themeColors: true, height: MIN_HEIGHT });
+figma.showUI(__html__, {
+  themeColors: true,
+  height: MIN_HEIGHT,
+  width: MIN_WIDTH,
+});
 
 figma.ui.onmessage = async (msg: PostToFigmaMessage) => {
   if (msg.type === "export-csv-file") {
