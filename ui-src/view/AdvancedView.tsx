@@ -24,7 +24,7 @@ export const AdvancedView = () => {
   );
 
   const [selectedExportFormat, setSelectedExportFormat] =
-    useState<typeof EXPORT_FORMATS[number]>("JSON");
+    useState<(typeof EXPORT_FORMATS)[number]>("JSON");
 
   const [region, setRegion] = useState("US");
   const [language, setLanguage] = useState("en");
