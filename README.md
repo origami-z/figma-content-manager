@@ -1,3 +1,7 @@
+This project has been moved to [JPMC Open Source Repo](https://github.com/jpmorganchase/Figma-Plugins-and-Widgets/tree/main/packages/copy-manager)
+
+---
+
 ![Plugin screenshot](docs/images/Plugin-screenshot.png)
 
 Figma plugin to export text content to CSV and import back to update.
